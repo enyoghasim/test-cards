@@ -26,40 +26,41 @@ function App() {
   };
 
   const removeBoard = (id) => {
-    const index = boards.findIndex((item) => item.id === id);
-    if (index < 0) return;
-
-    const tempBoards = [...boards];
-    tempBoards.splice(index, 1);
-    setBoards(tempBoards);
+    const item = boards.filter((item) => item.id !== id);
+    setBoards(item);
   };
 
   const addCardHandler = (id, title) => {
-    const index = boards.findIndex((item) => item.id === id);
-    if (index < 0) return;
-
-    const tempBoards = [...boards];
-    tempBoards[index].cards.push({
-      id: Date.now() + Math.random() * 2,
-      title,
-      labels: [],
-      date: "",
-      tasks: [],
+    const boardItems = boards.map((item) => {
+      if (item.id === id) {
+        item.cards.push({
+          id: Date.now() + Math.random() * 2,
+          title,
+          labels: [],
+          date: "",
+          tasks: [],
+        });
+        return item;
+      } else {
+        return item;
+      }
     });
-    setBoards(tempBoards);
+    setBoards(boardItems);
   };
 
   const removeCard = (bid, cid) => {
-    const index = boards.findIndex((item) => item.id === bid);
-    if (index < 0) return;
+    const board = boards.find((item) => item.id === bid);
 
-    const tempBoards = [...boards];
-    const cards = tempBoards[index].cards;
+    const cards = board.cards.filter((item) => item.id !== cid);
+    const tempBoards = boards.map((item) => {
+      if (item.id === bid) {
+        item.cards = cards;
+        return item;
+      } else {
+        return item;
+      }
+    });
 
-    const cardIndex = cards.findIndex((item) => item.id === cid);
-    if (cardIndex < 0) return;
-
-    cards.splice(cardIndex, 1);
     setBoards(tempBoards);
   };
 
