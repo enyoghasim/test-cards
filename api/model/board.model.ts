@@ -1,12 +1,17 @@
 import { Schema, Model } from "mongoose";
+import { v4 } from "uuid";
 
-const kabanSchema: any = new Schema({
+const BoardSchema: any = new Schema({
+  id: {
+    type: String,
+    default: v4(),
+  },
   title: {
     type: String,
     required: true,
   },
+  cards: [{ type: Schema.Types.ObjectId, ref: "Cards" }],
 });
+const boardModel: any = new Model("Boards", BoardSchema);
 
-const kabanModel: any = new Model("kaban", kabanSchema);
-
-export default kabanModel;
+export default boardModel;
