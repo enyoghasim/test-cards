@@ -1,0 +1,8 @@
+{
+  "name": "kaban-cards",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/enyoghasim/test-cards.git",
+  "author": "jeff-ofobrukweta <oghenerukevwejeff@gmail.com>",
+  "license": "MIT"
+}
