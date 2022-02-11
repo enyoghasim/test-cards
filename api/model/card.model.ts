@@ -21,6 +21,6 @@ const CardSchema: any = new Schema({
   tasks: [{ type: Schema.Types.ObjectId, ref: "Tasks" }],
 });
 
-const cardModel: any = new Model("Cards", CardSchema);
+const Card: any = new Model("Card", CardSchema);
 
-export default cardModel;
+export default Card;

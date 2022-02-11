@@ -1,16 +1,19 @@
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
 import { config } from "dotenv";
 
 import mongooseInstance from "./data.db.source/mongoose";
-const route = require('./route/index');
+import { router } from "./route";
 
 config();
-const app = express()
+const app = express();
 
 app.use(cors());
+app.use(express.json({}));
+app.use(bodyParser.json({ type: 'application/*+json' }))
 
-app.use('/', route);
+app.use("/api/v1/", router);
 
 mongooseInstance
   .then(() => {
