@@ -1,5 +1,5 @@
-import { Schema, Model } from "mongoose";
-import { v4 } from "uuid";
+import { Schema, Model } from 'mongoose';
+import { v4 } from 'uuid';
 
 const TaskSchema: any = new Schema({
   id: {
@@ -16,6 +16,6 @@ const TaskSchema: any = new Schema({
   },
 });
 
-const taskModel: any = new Model("Boards", TaskSchema);
+const taskModel: any = new Model('Boards', TaskSchema);
 
 export default taskModel;

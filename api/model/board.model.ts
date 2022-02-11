@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import { v4 } from "uuid";
+import { Schema, model } from 'mongoose';
+import { v4 } from 'uuid';
 
 const BoardSchema: any = new Schema({
   id: {
@@ -10,9 +10,8 @@ const BoardSchema: any = new Schema({
     type: String,
     required: true,
   },
-  cards: [{ type: Schema.Types.ObjectId, ref: "Cards" }],
+  cards: [{ type: Schema.Types.ObjectId, ref: 'Cards' }],
 });
-
 
 const Boards = model('Boards', BoardSchema);
 

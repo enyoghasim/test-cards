@@ -1,5 +1,5 @@
-import { Schema, Model } from "mongoose";
-import { v4 } from "uuid";
+import { Schema, Model } from 'mongoose';
+import { v4 } from 'uuid';
 
 const CardSchema: any = new Schema({
   id: {
@@ -17,10 +17,10 @@ const CardSchema: any = new Schema({
     type: Date,
     default: Date.now,
   },
-  labels: [{ type: Schema.Types.ObjectId, ref: "Labels" }],
-  tasks: [{ type: Schema.Types.ObjectId, ref: "Tasks" }],
+  labels: [{ type: Schema.Types.ObjectId, ref: 'Labels' }],
+  tasks: [{ type: Schema.Types.ObjectId, ref: 'Tasks' }],
 });
 
-const Card: any = new Model("Card", CardSchema);
+const Card: any = new Model('Card', CardSchema);
 
 export default Card;
