@@ -5,6 +5,7 @@
   "scripts": {
     "test": "jest",
     "dev": "nodemon",
+    "eslint": "eslint --cache --fix --ext .js,.jsx,ts,tsx",
     "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore . --fix",
     "serve": "concurrently \"nodemon\" \"cd frontend && yarn start\"",
     "build": "rimraf ./dist && tsc",
@@ -57,10 +58,9 @@
     }
   },
   "lint-staged": {
-    "api/**/*.{ts}": [
-      "prettier --config ./.prettierrc --write",
-      "./node_modules/.bin/eslint — fix",
-      "git add"
+    "*.{ts,tsx}": [
+      "yarn prettier:fix",
+      "eslint --cache --fix --ext .js,.jsx,ts,tsx, ."
     ]
   }
 }

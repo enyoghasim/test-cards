@@ -1,4 +1,4 @@
-import Card from 'api/model/card.model';
+import Card from '../model/card.model';
 import Boards from '../model/board.model';
 
 const createCard = async function (req: any, res: any, next: any) {
