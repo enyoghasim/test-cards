@@ -1,8 +1,8 @@
-import app from 'express';
+import app, { Router } from 'express';
 import { createBoard } from '../controller/board.controller';
 
 // Initiate router
-const router = app.Router();
+const router: Router = app.Router();
 
 router.get('/', createBoard);
 
