@@ -59,8 +59,8 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "yarn prettier:fix",
+    "*.{ts,js}": [
+      "yarn pretter",
       "yarn lint"
     ]
   }
