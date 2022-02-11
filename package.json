@@ -5,6 +5,7 @@
   "scripts": {
     "test": "jest",
     "dev": "nodemon",
+    "lint": "eslint . --ext .ts",
     "eslint": "eslint --cache --fix --ext .js,.jsx,ts,tsx",
     "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore . --fix",
     "serve": "concurrently \"nodemon\" \"cd frontend && yarn start\"",
@@ -60,7 +61,7 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "yarn prettier:fix",
-      "eslint --cache --fix --ext .js,.jsx,ts,tsx, ."
+      "yarn lint"
     ]
   }
 }
