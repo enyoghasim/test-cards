@@ -6,5 +6,6 @@ const router: Router = app.Router();
 
 router.get('/', createBoard);
 
+
 // Exporting router variable
 export { router };
