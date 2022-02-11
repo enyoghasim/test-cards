@@ -1,11 +1,10 @@
-import app, { Router } from 'express';
-import { createBoard } from '../controller/board.controller';
+import app, { Router } from 'express'
+import { createBoard } from '../controller/board.controller'
 
 // Initiate router
-const router: Router = app.Router();
+const router: Router = app.Router()
 
-router.get('/', createBoard);
-
+router.get('/', createBoard)
 
 // Exporting router variable
-export { router };
+export { router }
