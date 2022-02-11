@@ -1,16 +1,16 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
+
 import mongooseInstance from "./data.db.source/mongoose";
+const route = require('./route/index');
 
 config();
+const app = express()
 
-const app = express();
 app.use(cors());
 
-app.get("/", (_, res) => {
-  res.send("Hello World");
-});
+app.use('/', route);
 
 mongooseInstance
   .then(() => {

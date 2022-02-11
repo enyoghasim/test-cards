@@ -1,20 +1,19 @@
-import { Schema, Model } from "mongoose";
+import { Schema, model } from "mongoose";
+import { v4 } from "uuid";
 
 const BoardSchema: any = new Schema({
   id: {
     type: String,
-    required: true,
+    default: v4(),
   },
   title: {
     type: String,
     required: true,
   },
-  card: {
-    type: Array,
-    default: [],
-  },
+  cards: [{ type: Schema.Types.ObjectId, ref: "Cards" }],
 });
 
-const kabanModel: any = new Model("Kaban", BoardSchema);
 
-export default kabanModel;
+const Boards = model('Boards', BoardSchema);
+
+export default Boards;
