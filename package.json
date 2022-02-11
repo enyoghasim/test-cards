@@ -59,7 +59,8 @@
   "lint-staged": {
     "api/**/*.{ts}": [
       "prettier --config ./.prettierrc --write",
-      "eslint --fix"
+      "./node_modules/.bin/eslint — fix",
+      "git add"
     ]
   }
 }
