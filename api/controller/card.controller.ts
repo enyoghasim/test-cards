@@ -1,22 +1,24 @@
 import Card from '../model/card.model'
 import Boards from '../model/board.model'
 import { logger } from '../service/logger'
+import { NextFunction, Request, Response } from 'express'
 
-const createCard = async function (req: any, res: any, next: any) {
+const createCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    logger.info('working controller card')
+    const card = new Card(req.body.cardOption)
 
-    const b = new Card({
-      id: '122343',
-      title: 'test'
+    await card.save().then(async (result) => {
+      const board = await Boards.findByIdAndUpdate(
+        req?.query?.boardObjectId,
+        { $push: { cards: result._id } },
+        { new: true, useFindAndModify: false }
+      )
+
+      logger.info(board)
+      res.status(200).send('card create successful')
     })
-
-    await b.save()
-    logger.info(req, res)
-    res.json('hello')
-    next()
-  } catch (e) {
-    logger.error(e)
+  } catch (err) {
+    res.status(200).send(err)
   }
 }
 

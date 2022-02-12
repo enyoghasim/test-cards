@@ -14,7 +14,7 @@ app.use(cors())
 app.use(express.json({}))
 app.use(bodyParser.json({ type: 'application/*+json' }))
 
-app.use('/api/v1/', router)
+app.use('/api/v1', router)
 
 mongooseInstance
   .then(() => {

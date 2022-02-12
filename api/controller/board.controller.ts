@@ -1,21 +1,27 @@
 import express, { Application, Request, Response, NextFunction } from 'express'
 import Boards from '../model/board.model'
+import Card from '../model/card.model'
 import { logger } from '../service/logger'
 
-const createBoard = async function (req: Request, res: Response, next: NextFunction) {
-  try {
-    logger.info('working controller')
-    const b = new Boards({
-      id: '122343',
-      title: 'test'
-    })
-
-    await b.save()
-    res.json('hello')
-    next()
-  } catch (e) {
-    logger.error(e)
-  }
+const getBoard = async function (req: Request, res: Response, next: NextFunction) {
+  return Boards.find().then((res) => console.log(JSON.stringify(res, null, 2)))
 }
 
-export { createBoard }
+const createBoard = async function (req: Request, res: Response, next: NextFunction) {
+  const board = new Boards({
+    title: 'test 2',
+    description: 'test 2 description'
+  })
+
+  board
+    .save()
+    .then((result) => {
+      logger.info(result)
+      res.status(200).send('ok')
+    })
+    .catch((error) => {
+      res.status(500).json({ error })
+    })
+}
+
+export { createBoard, getBoard }
