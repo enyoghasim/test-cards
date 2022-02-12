@@ -1,21 +1,21 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
-import Boards from '../model/board.model';
+import express, { Application, Request, Response, NextFunction } from 'express'
+import Boards from '../model/board.model'
+import { logger } from '../service/logger'
 
 const createBoard = async function (req: Request, res: Response, next: NextFunction) {
   try {
-    console.log('working controller');
+    logger.info('working controller')
     const b = new Boards({
       id: '122343',
-      title: 'test',
-    });
+      title: 'test'
+    })
 
-    await b.save();
-    console.log(req, res);
-    res.json('hello');
-    next();
+    await b.save()
+    res.json('hello')
+    next()
   } catch (e) {
-    console.log(e);
+    logger.error(e)
   }
-};
+}
 
-export { createBoard };
+export { createBoard }

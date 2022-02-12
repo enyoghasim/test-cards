@@ -1,4 +1,4 @@
-import express, { Application, Request, Response, NextFunction } from 'express'
+import express, { Application } from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { config } from 'dotenv'
@@ -18,13 +18,10 @@ app.use('/api/v1/', router)
 
 mongooseInstance
   .then(() => {
-    console.log('connected successfully..')
     app.listen(process.env.PORT || 9090, () => {
-      logger.info(
-        `!!! Server is running on port ${process.env.PORT || 9090} !!!`
-      )
+      logger.info(`!!! Server is running on port ${process.env.PORT || 9090} !!!`)
     })
   })
   .catch((err) => {
-    console.error('not connected successfully..', err)
+    logger.error(err)
   })

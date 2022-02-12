@@ -61,7 +61,7 @@
   "lint-staged": {
     "api/**/*.{ts}": [
       "yarn pretter",
-      "yarn lint"
+      "yarn lint:fix"
     ]
   },
   "husky": {

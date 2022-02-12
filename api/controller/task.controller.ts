@@ -1,5 +1,7 @@
-const createTask = async function (req: any, res: any, next: any) {
-  console.log('working controller', req, res, next);
-};
+import { logger } from '../service/logger'
 
-export { createTask };
+const createTask = async function (req: any, res: any, next: any) {
+  logger.info(req, res, next)
+}
+
+export { createTask }

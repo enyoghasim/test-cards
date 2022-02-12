@@ -1,22 +1,23 @@
-import Card from '../model/card.model';
-import Boards from '../model/board.model';
+import Card from '../model/card.model'
+import Boards from '../model/board.model'
+import { logger } from '../service/logger'
 
 const createCard = async function (req: any, res: any, next: any) {
   try {
-    console.log('working controller card');
+    logger.info('working controller card')
 
     const b = new Card({
       id: '122343',
-      title: 'test',
-    });
+      title: 'test'
+    })
 
-    await b.save();
-    console.log(req, res);
-    res.json('hello');
-    next();
+    await b.save()
+    logger.info(req, res)
+    res.json('hello')
+    next()
   } catch (e) {
-    console.log(e);
+    logger.error(e)
   }
-};
+}
 
-export { createCard };
+export { createCard }
