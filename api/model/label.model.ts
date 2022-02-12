@@ -1,7 +1,13 @@
 import { v4 } from 'uuid'
-import { Schema, Model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 
-const LabelSchema: any = new Schema({
+interface ILabel {
+  id: string;
+  title: string;
+  color: string;
+}
+
+const LabelSchema: any = new Schema<ILabel>({
   id: {
     type: String,
     default: v4()
@@ -16,6 +22,6 @@ const LabelSchema: any = new Schema({
   }
 })
 
-const labelModel: any = new Model('Labels', LabelSchema)
+const labelModel: any = model<ILabel>('Labels', LabelSchema)
 
 export default labelModel

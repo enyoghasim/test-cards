@@ -1,7 +1,13 @@
-import { Schema, Model } from 'mongoose'
+import { Schema, Model, model } from 'mongoose'
 import { v4 } from 'uuid'
 
-const TaskSchema: any = new Schema({
+interface ITask {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
+const TaskSchema: any = new Schema<ITask>({
   id: {
     type: String,
     default: v4()
@@ -16,6 +22,6 @@ const TaskSchema: any = new Schema({
   }
 })
 
-const taskModel: any = new Model('Boards', TaskSchema)
+const taskModel: any = model<ITask>('Boards', TaskSchema)
 
 export default taskModel
