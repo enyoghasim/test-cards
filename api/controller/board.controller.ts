@@ -8,10 +8,7 @@ const getBoard = async function (req: Request, res: Response, next: NextFunction
 }
 
 const createBoard = async function (req: Request, res: Response, next: NextFunction) {
-  const board = new Boards({
-    title: 'test 2',
-    description: 'test 2 description'
-  })
+  const board = new Boards(req?.body?.boardOption)
 
   board
     .save()

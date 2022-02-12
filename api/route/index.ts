@@ -5,8 +5,8 @@ import { createCard } from '../controller/card.controller'
 // Initiate router
 const router: Router = app.Router()
 
-router.get('/', createBoard)
-router.get('/create/card', createCard)
+router.post('/', createBoard)
+router.post('/create/card', createCard)
 router.get('/get/board', getBoard)
 
 // Exporting router variable
