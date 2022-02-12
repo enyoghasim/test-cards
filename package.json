@@ -60,9 +60,9 @@
     }
   },
   "lint-staged": {
-    "api/**/*.{ts}": [
-      "yarn pretter",
-      "yarn lint:fix"
+    "src/**/*.{ts}": [
+      "prettier --config ./.prettierrc --write",
+      "eslint --fix"
     ]
   }
 }
