@@ -60,7 +60,7 @@
     }
   },
   "lint-staged": {
-    "*.api/{ts,js}": [
+    "api/**/*.{ts}": [
       "yarn pretter",
       "yarn lint:fix"
     ]

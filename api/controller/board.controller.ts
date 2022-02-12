@@ -7,7 +7,7 @@ const createBoard = async function (req: Request, res: Response, next: NextFunct
     const b = new Boards({
       id: '122343',
       title: 'test'
-    })
+    });
 
     await b.save()
     console.log(req, res)
