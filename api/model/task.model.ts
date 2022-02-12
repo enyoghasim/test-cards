@@ -1,21 +1,21 @@
-import { Schema, Model } from 'mongoose'
-import { v4 } from 'uuid'
+import { Schema, Model } from 'mongoose';
+import { v4 } from 'uuid';
 
 const TaskSchema: any = new Schema({
   id: {
     type: String,
-    default: v4()
+    default: v4(),
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   completed: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
-const taskModel: any = new Model('Boards', TaskSchema)
+const taskModel: any = new Model('Boards', TaskSchema);
 
-export default taskModel
+export default taskModel;

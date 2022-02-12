@@ -1,21 +1,21 @@
-import { v4 } from 'uuid'
-import { Schema, Model } from 'mongoose'
+import { v4 } from 'uuid';
+import { Schema, Model } from 'mongoose';
 
 const LabelSchema: any = new Schema({
   id: {
     type: String,
-    default: v4()
+    default: v4(),
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   color: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const labelModel: any = new Model('Labels', LabelSchema)
+const labelModel: any = new Model('Labels', LabelSchema);
 
-export default labelModel
+export default labelModel;
