@@ -4,6 +4,7 @@ import Boards from '../model/board.model'
 const createCard = async function (req: any, res: any, next: any) {
   try {
     console.log('working controller card')
+    
     const b = new Card({
       id: '122343',
       title: 'test'

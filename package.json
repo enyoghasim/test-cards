@@ -54,15 +54,19 @@
     "uuid": "^8.3.2",
     "winston": "^3.5.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   },
   "lint-staged": {
     "src/**/*.{ts}": [
       "prettier --config ./.prettierrc --write",
       "eslint --fix"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
