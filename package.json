@@ -61,7 +61,7 @@
   "lint-staged": {
     "src/**/*.{ts}": [
       "yarn pretter && git add -A .",
-      "eslint --fix"
+      "yarn lint"
     ]
   },
   "husky": {
