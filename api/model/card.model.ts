@@ -1,13 +1,15 @@
 import { Schema, model } from 'mongoose'
 import { v4 } from 'uuid'
+import { logger } from '../service/logger'
 
 interface ICard {
   id: string;
   title: string;
   description: string;
-  date: any;
   labels: object[];
   tasks: object[];
+  updatedAt: any;
+  createdAt: any;
 }
 
 const CardSchema = new Schema<ICard>(
@@ -23,12 +25,10 @@ const CardSchema = new Schema<ICard>(
     description: {
       type: String
     },
-    date: {
-      type: Date,
-      default: Date.now
-    },
     labels: [{ type: Schema.Types.ObjectId, ref: 'Labels' }],
-    tasks: [{ type: Schema.Types.ObjectId, ref: 'Tasks' }]
+    tasks: [{ type: Schema.Types.ObjectId, ref: 'Tasks' }],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
   },
   {
     toJSON: {
@@ -36,6 +36,17 @@ const CardSchema = new Schema<ICard>(
     }
   }
 )
+
+CardSchema.pre('save', function (next) {
+  // do stuff
+  const now = new Date()
+  this.updated_at = now
+  if (!this.created_at) {
+    this.created_at = now
+  }
+  logger.info('before saving here')
+  next()
+})
 
 const Card: any = model<ICard>('Card', CardSchema)
 

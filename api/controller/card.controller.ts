@@ -6,7 +6,6 @@ import { NextFunction, Request, Response } from 'express'
 const createCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const card = new Card(req.body.cardOption)
-
     await card.save().then(async (result) => {
       const board = await Boards.findByIdAndUpdate(
         req?.query?.boardObjectId,
@@ -22,4 +21,12 @@ const createCard = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export { createCard }
+const moveCard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    logger.info('move card controller')
+  } catch (err) {
+    logger.error(err)
+  }
+}
+
+export { createCard, moveCard }

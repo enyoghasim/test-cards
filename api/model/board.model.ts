@@ -1,11 +1,14 @@
 import { Schema, model, Model } from 'mongoose'
 import { v4 } from 'uuid'
+import { logger } from '../service/logger'
 
 interface IBoard {
   id: string;
   title: string;
   description: string;
   cards: any[];
+  updatedAt: any;
+  createdAt: any;
 }
 
 const BoardSchema = new Schema<IBoard>(
@@ -23,7 +26,9 @@ const BoardSchema = new Schema<IBoard>(
       required: true,
       default: 'no description for this board'
     },
-    cards: [{ type: Schema.Types.ObjectId, ref: 'Cards' }]
+    cards: [{ type: Schema.Types.ObjectId, ref: 'Cards' }],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
   },
   {
     toJSON: {
@@ -31,6 +36,17 @@ const BoardSchema = new Schema<IBoard>(
     }
   }
 )
+
+BoardSchema.pre('save', function (next) {
+  // do stuff
+  const now = new Date()
+  this.updated_at = now
+  if (!this.created_at) {
+    this.created_at = now
+  }
+  logger.info('before saving here')
+  next()
+})
 
 const Boards = model<IBoard>('Boards', BoardSchema)
 
