@@ -11,6 +11,7 @@
     "serve": "concurrently \"nodemon\" \"cd frontend && yarn start\"",
     "build": "rimraf ./dist && tsc",
     "pretter": "prettier --config .prettierrc.json --write api/**/*.ts",
+    "prettier:check": "prettier --check .",
     "start": "npm run build && node dist/app.js",
     "postinstall": "cd frontend && yarn install"
   },
