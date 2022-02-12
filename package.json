@@ -59,7 +59,7 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "src/**/*.{ts}": [
+    "api/**/*.{ts}": [
       "yarn pretter && git add -A .",
       "yarn lint"
     ]
