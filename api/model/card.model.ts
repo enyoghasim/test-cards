@@ -40,11 +40,11 @@ const CardSchema = new Schema<ICard>(
 CardSchema.pre('save', function (next) {
   // do stuff
   const now = new Date()
-  this.updated_at = now
-  if (!this.created_at) {
-    this.created_at = now
+  this.updatedAt = now
+  if (!this.createdAt) {
+    this.createdAt = now
   }
-  logger.info('before saving here')
+  logger.info('before saving course here')
   next()
 })
 

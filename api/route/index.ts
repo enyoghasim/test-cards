@@ -5,11 +5,11 @@ import { addCardToBoard, addLabelToCard, moveCardFromBoard } from '../controller
 // Initiate router
 const router: Router = app.Router()
 
-router.post('/', createBoard)
+router.post('/create/board', createBoard)
 
-router.post('/create/label', addLabelToCard)
+router.post('/card/create/label', addLabelToCard)
 
-router.post('/create/card', addCardToBoard)
+router.post('/board/create/card', addCardToBoard)
 
 router.get('/get/board', getBoard)
 

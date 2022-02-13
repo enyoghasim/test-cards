@@ -44,7 +44,7 @@ BoardSchema.pre('save', function (next) {
   if (!this.created_at) {
     this.created_at = now
   }
-  logger.info('before saving here')
+  logger.info('before saving board here')
   next()
 })
 
