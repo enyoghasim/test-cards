@@ -49,10 +49,26 @@ const moveCardFromBoard = async (req: Request, res: Response, next: NextFunction
 
 const deleteCardFromBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    logger.info('move card controller')
-    const card = await Card.findOneAndDelete()
+    logger.info('delete card controller')
+
+    const cardId = req.query.cardId
+
+    // deleted card
+    const deleted = await Card.findOneAndDelete({ _id: cardId })
+    if (!deleted) return res.status(200).send('deleted card failed to be removed successful')
+    if (deleted) {
+      // delete corresponding id in board model
+      Boards.find({ cards: { $in: [cardId] } }).then((boards) => {
+        Promise.all(
+          boards.map((board) => Boards.findOneAndUpdate(board._id, { $pull: { cards: cardId } }, { new: true }))
+        )
+      })
+
+      res.status(200).send('deleted card from board successful')
+    }
   } catch (err) {
     logger.error(err)
+    res.status(500).send(err)
   }
 }
 

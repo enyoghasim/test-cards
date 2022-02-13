@@ -1,6 +1,6 @@
 import app, { Router } from 'express'
 import { createBoard, getBoard } from '../controller/board.controller'
-import { addCardToBoard, addLabelToCard, moveCardFromBoard } from '../controller/card.controller'
+import { addCardToBoard, addLabelToCard, deleteCardFromBoard, moveCardFromBoard } from '../controller/card.controller'
 import { addTaskToCard } from '../controller/task.controller'
 
 // Initiate router
@@ -17,6 +17,8 @@ router.post('/board/create/card', addCardToBoard)
 router.post('/card/create/task', addTaskToCard)
 
 router.put('/move/card/board', moveCardFromBoard)
+
+router.delete('/board/delete/card', deleteCardFromBoard)
 
 // Exporting router variable
 export { router }

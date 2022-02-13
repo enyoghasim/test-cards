@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
 import { v4 } from 'uuid'
 import { logger } from '../service/logger'
+import Boards from './board.model'
 import LabelModel from './label.model'
 import TaskModel from './task.model'
 
