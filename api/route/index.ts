@@ -1,6 +1,6 @@
 import app, { Router } from 'express'
 import { createBoard, getBoard } from '../controller/board.controller'
-import { addCardToBoard, addLabelToCard, moveCard } from '../controller/card.controller'
+import { addCardToBoard, addLabelToCard, moveCardFromBoard } from '../controller/card.controller'
 
 // Initiate router
 const router: Router = app.Router()

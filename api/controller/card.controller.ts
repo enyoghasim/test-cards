@@ -39,7 +39,7 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
-const moveCard = async (req: Request, res: Response, next: NextFunction) => {
+const moveCardFromBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     logger.info('move card controller')
   } catch (err) {
@@ -47,4 +47,4 @@ const moveCard = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export { addCardToBoard, moveCard, addLabelToCard }
+export { addCardToBoard, moveCardFromBoard, addLabelToCard }
