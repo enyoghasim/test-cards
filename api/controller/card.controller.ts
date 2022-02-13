@@ -47,4 +47,13 @@ const moveCardFromBoard = async (req: Request, res: Response, next: NextFunction
   }
 }
 
-export { addCardToBoard, moveCardFromBoard, addLabelToCard }
+const deleteCardFromBoard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    logger.info('move card controller')
+    const card = await Card.findOneAndDelete()
+  } catch (err) {
+    logger.error(err)
+  }
+}
+
+export { addCardToBoard, moveCardFromBoard, addLabelToCard, deleteCardFromBoard }
