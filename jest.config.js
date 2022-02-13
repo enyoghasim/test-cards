@@ -1,6 +1,6 @@
 module.exports = {
-    clearMocks: true,
-    roots: ['<rootDir>/api'],
-    testEnvironment: 'node',
-    preset: 'ts-jest'
-};
+  clearMocks: true,
+  roots: ['<rootDir>/api'],
+  testEnvironment: 'node',
+  preset: 'ts-jest'
+}

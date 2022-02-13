@@ -1,10 +1,16 @@
 import axios from 'axios';
 
-const instance = axios.create({
+
+const config = {
     baseURL: process.env.BASE_API_URL,
     timeout: 1000,
-    headers: { 'X-Custom-Header': 'kaban-api' }
-});
+    headers: {
+        'X-Custom-Header': 'kaban-api',
+        "Content-Type": "application/json"
+    }
+}
+
+const instance = axios.create(config);
 
 
 const axiosGetInterface = async (path = "/", config = {}) => {
