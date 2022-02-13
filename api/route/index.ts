@@ -13,5 +13,7 @@ router.post('/create/card', addCardToBoard)
 
 router.get('/get/board', getBoard)
 
+router.put('/move/card/board', moveCardFromBoard)
+
 // Exporting router variable
 export { router }
