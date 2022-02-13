@@ -14,7 +14,7 @@ router.post('/card/create/label', addLabelToCard)
 
 router.post('/board/create/card', addCardToBoard)
 
-// router.post('/card/create/task', addTaskToCard)
+router.post('/card/create/task', addTaskToCard)
 
 router.put('/move/card/board', moveCardFromBoard)
 
