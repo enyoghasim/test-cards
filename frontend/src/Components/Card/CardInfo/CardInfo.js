@@ -123,7 +123,7 @@ function CardInfo(props) {
   return (
     <Modal onClose={props.onClose}>
       <div className="cardinfo">
-    <Link to="/r">d leeoem ddd</Link>
+    {/* <Link to="/r">d leeoem ddd</Link> */}
         <div className="cardinfo_box">
           <div className="cardinfo_box_title">
             <Type />
