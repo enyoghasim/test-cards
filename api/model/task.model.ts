@@ -45,6 +45,6 @@ TaskSchema.pre('save', function (next) {
   next()
 })
 
-const TaskModel = model<ITask>('Boards', TaskSchema)
+const TaskModel = model<ITask>('TaskModel', TaskSchema)
 
 export default TaskModel
