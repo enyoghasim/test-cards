@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams,Link} from 'react-router-dom'
+
 import { CheckSquare, Clock, MoreHorizontal } from "react-feather";
 
 import Dropdown from "../Dropdown/Dropdown";
@@ -37,6 +39,20 @@ function Card(props) {
     return day + " " + month;
   };
 
+  const params = useParams()
+
+  useEffect(() => {
+    //  return navigate.listen((location) => { 
+    //     console.log(`You changed the page to: ${location.pathname}`) 
+    //  }) 
+    console.log(params);
+    if(!params.boardId || !params.cardId || props.boardId !== params.boardId || id !== params.id){
+      setShowModal(false)
+    }else{
+      setShowModal(true)
+    }
+  },[params]) 
+
   return (
     <>
       {showModal && (
@@ -47,7 +63,7 @@ function Card(props) {
           updateCard={props.updateCard}
         />
       )}
-      <div
+      <Link to={`/${props.boardId}/${id}`}
         className="card"
         draggable
         onDragEnd={() => props.dragEnded(props.boardId, id)}
@@ -97,7 +113,7 @@ function Card(props) {
             </p>
           )}
         </div>
-      </div>
+      </Link>
     </>
   );
 }

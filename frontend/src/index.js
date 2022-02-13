@@ -15,7 +15,7 @@ ReactDOM.render(
       <Route path="/" element={<Main />}/>
       <Route path="/:boardId/:cardId" element={<Main />}/>
     </Routes>
-  </BrowserRouter>,
+  </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

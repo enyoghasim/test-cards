@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import { useNavigate ,Link} from 'react-router-dom'
+import { useParams,Link} from 'react-router-dom'
 import {
   Calendar,
   CheckSquare,
@@ -109,21 +109,21 @@ function CardInfo(props) {
       date,
     });
   };
-  // const navigate = useNavigate() 
+  const params = useParams() 
 
-  // useEffect(() => {
-  //    return navigate.listen((location) => { 
-  //       console.log(`You changed the page to: ${location.pathname}`) 
-  //    }) 
-  // },[navigate]) 
-  // useEffect(() => {
-  //   if (props.updateCard) props.updateCard(props.boardId, values.id, values);
-  // }, [values]);
+  useEffect(() => {
+    //  return navigate.listen((location) => { 
+    //     console.log(`You changed the page to: ${location.pathname}`) 
+    //  }) 
+    console.log(params);
+  },[params]) 
+  useEffect(() => {
+    if (props.updateCard) props.updateCard(props.boardId, values.id, values);
+  }, [values]);
 
   return (
     <Modal onClose={props.onClose}>
       <div className="cardinfo">
-    {/* <Link to="/r">d leeoem ddd</Link> */}
         <div className="cardinfo_box">
           <div className="cardinfo_box_title">
             <Type />
