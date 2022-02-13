@@ -5,6 +5,8 @@ interface ILabel {
   id: string;
   title: string;
   color: string;
+  updatedAt: any;
+  createdAt: any;
 }
 
 const LabelSchema: any = new Schema<ILabel>({
@@ -19,9 +21,11 @@ const LabelSchema: any = new Schema<ILabel>({
   color: {
     type: String,
     required: true
-  }
+  },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
 })
 
-const labelModel: any = model<ILabel>('Labels', LabelSchema)
+const LabelModel: any = model<ILabel>('Labels', LabelSchema)
 
-export default labelModel
+export default LabelModel
