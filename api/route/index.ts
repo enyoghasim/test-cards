@@ -8,15 +8,15 @@ const router: Router = app.Router()
 
 router.post('/create/board', createBoard)
 
+router.get('/get/board', getBoard)
+
 router.post('/card/create/label', addLabelToCard)
 
 router.post('/board/create/card', addCardToBoard)
 
-router.get('/get/board', getBoard)
+// router.post('/card/create/task', addTaskToCard)
 
 router.put('/move/card/board', moveCardFromBoard)
-
-router.post('/card/create/task', addTaskToCard)
 
 // Exporting router variable
 export { router }
