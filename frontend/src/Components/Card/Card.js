@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams,Link} from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { CheckSquare, Clock, MoreHorizontal } from "react-feather";
 
@@ -40,35 +40,41 @@ function Card(props) {
   };
 
   const params = useParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    //  return navigate.listen((location) => { 
-    //     console.log(`You changed the page to: ${location.pathname}`) 
-    //  }) 
-    console.log(params);
-    if(!params.boardId || !params.cardId || props.boardId !== params.boardId || id !== params.id){
+    if (!params.boardId || !props.boardId) {
       setShowModal(false)
-    }else{
+    } else if (!(Number(params.boardId) ===
+      Number(props.boardId)) ||
+      !(Number(params.cardId) ===
+        Number(id))) {
+      setShowModal(false)
+    } else if ((Number(params.boardId) ===
+      Number(props.boardId)) ||
+      (Number(params.cardId) ===
+        Number(id))) {
       setShowModal(true)
     }
-  },[params]) 
+  }, [params])
 
   return (
     <>
       {showModal && (
         <CardInfo
-          onClose={() => setShowModal(false)}
+          onClose={() => navigate('/')}
           card={props.card}
           boardId={props.boardId}
           updateCard={props.updateCard}
         />
       )}
-      <Link to={`/${props.boardId}/${id}`}
+      <div
+
         className="card"
         draggable
         onDragEnd={() => props.dragEnded(props.boardId, id)}
         onDragEnter={() => props.dragEntered(props.boardId, id)}
-        onClick={() => setShowModal(true)}
+        onClick={() => navigate(`/${props.boardId}/${id}`)}
       >
         <div className="card_top">
           <div className="card_top_labels">
@@ -113,7 +119,7 @@ function Card(props) {
             </p>
           )}
         </div>
-      </Link>
+      </div>
     </>
   );
 }

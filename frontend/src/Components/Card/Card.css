@@ -6,6 +6,8 @@
   background-color: #fff;
   border-radius: 10px;
   cursor: pointer;
+  text-decoration: none;
+  color: #000;
 }
 
 .card_top {
