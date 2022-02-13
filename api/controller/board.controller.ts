@@ -1,6 +1,5 @@
 import express, { Application, Request, Response, NextFunction } from 'express'
 import Boards from '../model/board.model'
-import Card from '../model/card.model'
 import { logger } from '../service/logger'
 
 const getBoard = async function (req: Request, res: Response, next: NextFunction) {
