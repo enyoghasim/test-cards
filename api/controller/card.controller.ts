@@ -3,6 +3,7 @@ import Boards from '../model/board.model'
 import { logger } from '../service/logger'
 import { NextFunction, Request, Response } from 'express'
 import LabelModel from '../model/label.model'
+import TaskModel from '../model/task.model'
 
 const addCardToBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -24,7 +25,12 @@ const addCardToBoard = async (req: Request, res: Response, next: NextFunction) =
 
 const addLabelToCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const label = new LabelModel(req.body.labelOption)
+    const { labelOption } = req.body
+
+    const labelOptionpayload = { ...labelOption, _id: req?.query?.cardObjectId, cardRefId: req?.query?.cardObjectId }
+
+    const label = new LabelModel(labelOptionpayload)
+
     await label.save().then(async (result) => {
       const card = await Card.findByIdAndUpdate(
         req?.query?.cardObjectId,
@@ -51,13 +57,17 @@ const deleteCardFromBoard = async (req: Request, res: Response, next: NextFuncti
   try {
     logger.info('delete card controller')
 
-    const cardId = req.query.cardId
+    const cardId: any = req.query.cardId
 
     // deleted card
     const deleted = await Card.findOneAndDelete({ _id: cardId })
-    if (!deleted) return res.status(200).send('deleted card failed to be removed successful')
+
+    // deleted all related TaskModel LabelModel
+    await TaskModel.deleteMany({ _id: cardId })
+    await LabelModel.deleteMany({ _id: cardId })
+
+    if (!deleted) return res.status(400).send('deleted card failed to be removed successful')
     if (deleted) {
-      // delete corresponding id in board model
       Boards.find({ cards: { $in: [cardId] } }).then((boards) => {
         Promise.all(
           boards.map((board) => Boards.findOneAndUpdate(board._id, { $pull: { cards: cardId } }, { new: true }))

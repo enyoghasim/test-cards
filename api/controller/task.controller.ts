@@ -5,7 +5,12 @@ import { logger } from '../service/logger'
 
 const addTaskToCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const task = new TaskModel(req.body.taskOption)
+    const { taskOption } = req.body
+
+    const taskOptionpayload = { ...taskOption, _id: req?.query?.cardObjectId, cardRefId: req?.query?.cardObjectId }
+
+    const task = new TaskModel(taskOptionpayload)
+
     await task.save().then(async (result) => {
       const card = await Card.findByIdAndUpdate(
         req?.query?.cardObjectId,

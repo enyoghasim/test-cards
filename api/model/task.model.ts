@@ -4,6 +4,7 @@ import { logger } from '../service/logger'
 
 interface ITask {
   id: string;
+  cardRefId: string;
   title: string;
   completed: boolean;
   updatedAt: any;
@@ -14,6 +15,11 @@ const TaskSchema = new Schema<ITask>(
   {
     id: {
       type: String,
+      default: v4()
+    },
+    cardRefId: {
+      type: String,
+      required: true,
       default: v4()
     },
     title: {

@@ -4,6 +4,7 @@ import { logger } from '../service/logger'
 
 interface ILabel {
   id: string;
+  cardRefId: string;
   title: string;
   color: string;
   updatedAt: any;
@@ -13,6 +14,10 @@ interface ILabel {
 const LabelSchema = new Schema<ILabel>(
   {
     id: {
+      type: String,
+      default: v4()
+    },
+    cardRefId: {
       type: String,
       default: v4()
     },
