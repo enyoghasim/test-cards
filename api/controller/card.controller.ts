@@ -67,6 +67,7 @@ const deleteCardFromBoard = async (req: Request, res: Response, next: NextFuncti
     await LabelModel.deleteMany({ cardRefId: cardId })
 
     if (!deleted) return res.status(400).send('deleted card failed to be removed successful')
+
     if (deleted) {
       await Boards.find({ cards: { $in: [cardId] } }).then((boards) => {
         Promise.all(
