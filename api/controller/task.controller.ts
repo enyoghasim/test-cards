@@ -7,7 +7,7 @@ const addTaskToCard = async (req: Request, res: Response, next: NextFunction) =>
   try {
     const { taskOption } = req.body
 
-    const taskOptionpayload = { ...taskOption, _id: req?.query?.cardObjectId, cardRefId: req?.query?.cardObjectId }
+    const taskOptionpayload = { ...taskOption, cardRefId: req?.query?.cardObjectId }
 
     const task = new TaskModel(taskOptionpayload)
 

@@ -27,7 +27,7 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
   try {
     const { labelOption } = req.body
 
-    const labelOptionpayload = { ...labelOption, _id: req?.query?.cardObjectId, cardRefId: req?.query?.cardObjectId }
+    const labelOptionpayload = { ...labelOption, cardRefId: req?.query?.cardObjectId }
 
     const label = new LabelModel(labelOptionpayload)
 
@@ -63,12 +63,12 @@ const deleteCardFromBoard = async (req: Request, res: Response, next: NextFuncti
     const deleted = await Card.findOneAndDelete({ _id: cardId })
 
     // deleted all related TaskModel LabelModel
-    await TaskModel.deleteMany({ _id: cardId })
-    await LabelModel.deleteMany({ _id: cardId })
+    await TaskModel.deleteMany({ cardRefId: cardId })
+    await LabelModel.deleteMany({ cardRefId: cardId })
 
     if (!deleted) return res.status(400).send('deleted card failed to be removed successful')
     if (deleted) {
-      Boards.find({ cards: { $in: [cardId] } }).then((boards) => {
+      await Boards.find({ cards: { $in: [cardId] } }).then((boards) => {
         Promise.all(
           boards.map((board) => Boards.findOneAndUpdate(board._id, { $pull: { cards: cardId } }, { new: true }))
         )
