@@ -39,7 +39,8 @@ const axiosPutInterface = async (path = '/', optionsdata = {}, config = {}) => {
 
 const axiosDeleteInterface = async (path = '/', optionsdata = {}, config = {}) => {
     try {
-        return await instance.delete(path, config)
+
+        return await instance.delete(path, optionsdata, config)
     } catch (error) {
         return error;
     }

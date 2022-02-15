@@ -5,7 +5,7 @@ import Board from "../Components/Board/Board";
 
 import "./main.css";
 import Editable from "../Components/Editabled/Editable";
-import { axiosGetInterface, axiosPostInterface } from "../Util/axios";
+import { axiosGetInterface, axiosPostInterface, axiosDeleteInterface } from "../Util/axios";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
@@ -43,9 +43,6 @@ function App() {
   };
 
   const addCardHandler = async (id, title) => {
- 
-
-    // const tempBoards = [...boardsData];
     setBoardActionInProgress(true);
     const addData = await axiosPostInterface(`/board/create/card?boardObjectId=${id}`, {
       cardOption: {
@@ -63,13 +60,13 @@ function App() {
           return item;
         }
       });
-    setBoardsData(tempBoards);
+      setBoardsData(tempBoards);
 
     }
     setBoardActionInProgress(false);
   };
 
-  const removeCard = (bid, cid) => {
+  const removeCard = async (bid, cid) => {
     const board = boardsData.find((item) => item._id === bid);
 
     const cards = board.cards.filter((item) => item._id !== cid);
@@ -81,8 +78,10 @@ function App() {
         return item;
       }
     });
-
     setBoardsData(tempBoards);
+    setBoardActionInProgress(true);
+    await axiosDeleteInterface(`/board/delete/card?cardId=${cid}`)
+    setBoardActionInProgress(false);
   };
 
   const dragEnded = (bid, cid) => {
