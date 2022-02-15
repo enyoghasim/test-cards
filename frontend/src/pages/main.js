@@ -9,7 +9,8 @@ import { axiosGetInterface, axiosPostInterface } from "../Util/axios";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [boardActionInProgress, setBoardActionInProgress] = useState(false);
 
 
   const [targetCard, setTargetCard] = useState({
@@ -19,25 +20,26 @@ function App() {
 
   const addboardHandler = async (name) => {
     const tempBoards = [...boardsData];
+    setBoardActionInProgress(true);
     const addData = await axiosPostInterface('/create/board', {
-      boardOption : {
+      boardOption: {
         title: name,
-        
+
       }
     })
-    tempBoards.push({
-      id: Date.now() + Math.random() * 2,
-      title: name,
-      cards: [],
-    });
-    setBoardsData(tempBoards);
-
-
+    if (addData.status === 200 && addData.data) {
+      tempBoards.push(addData.data.data);
+      setBoardsData(tempBoards);
+    }
+    setBoardActionInProgress(false);
   };
 
   const removeBoard = (id) => {
     const item = boardsData.filter((item) => item._id !== id);
+    setBoardActionInProgress(true);
     setBoardsData(item);
+
+    setBoardActionInProgress(false);
   };
 
   const addCardHandler = (id, title) => {
@@ -128,10 +130,10 @@ function App() {
   };
 
   const fetchBoards = async () => {
-    setIsloading(true);
+    setIsLoading(true);
     const boardsData = await axiosGetInterface('/get/board');
     setBoardsData(boardsData ? boardsData.data : []);
-    setIsloading(false);
+    setIsLoading(false);
 
   }
 
@@ -185,6 +187,7 @@ function App() {
               text="Add Board"
               buttonText="Add Board"
               onSubmit={addboardHandler}
+              disabled={boardActionInProgress}
             />
           </div>
         </div>

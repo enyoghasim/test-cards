@@ -30,6 +30,11 @@ p {
     justify-content: center;
 }
 
+button[disabled],button[disabled]:hover {
+  cursor: not-allowed !important;
+  background-color: #0079bfab !important;
+}
+
 .lds-spinner {
   color: official;
   display: inline-block;
