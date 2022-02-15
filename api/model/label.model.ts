@@ -35,7 +35,8 @@ const LabelSchema = new Schema<ILabel>(
   {
     toJSON: {
       virtuals: true
-    }
+    },
+    versionKey: false
   }
 )
 

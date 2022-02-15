@@ -36,7 +36,8 @@ const CardSchema = new Schema<ICard>(
   {
     toJSON: {
       virtuals: true
-    }
+    },
+    versionKey: false
   }
 )
 

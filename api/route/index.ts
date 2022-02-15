@@ -8,7 +8,7 @@ import {
   moveCardFromBoards,
   moveCardWithinBoard
 } from '../controller/card.controller'
-import { addTaskToCard } from '../controller/task.controller'
+import { addTaskToCard, editTask } from '../controller/task.controller'
 
 // Initiate router
 const router: Router = app.Router()
@@ -24,6 +24,8 @@ router.post('/card/create/label', addLabelToCard)
 router.post('/board/create/card', addCardToBoard)
 
 router.post('/card/create/task', addTaskToCard)
+
+router.patch('/edit/task', editTask)
 
 router.put('/move/card/board', moveCardFromBoards)
 

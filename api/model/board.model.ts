@@ -33,7 +33,8 @@ const BoardSchema = new Schema<IBoard>(
   {
     toJSON: {
       virtuals: true
-    }
+    },
+    versionKey: false
   }
 )
 

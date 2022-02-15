@@ -36,7 +36,8 @@ const TaskSchema = new Schema<ITask>(
   {
     toJSON: {
       virtuals: true
-    }
+    },
+    versionKey: false
   }
 )
 

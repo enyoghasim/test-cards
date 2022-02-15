@@ -25,4 +25,15 @@ const addTaskToCard = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-export { addTaskToCard }
+const editTask = async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    const updatedData = req.body.taskEditOption
+    const { taskObjectId } = req.query
+    const data = (await TaskModel.findOneAndUpdate({ _id: taskObjectId }, updatedData)) as any
+    res.status(200).json({ message: 'edited task successful', status: 200, data: { ...data?._doc, ...updatedData } })
+  } catch (err) {
+    res.status(500).json({ message: 'edited task failed', status: 500, error: err })
+  }
+}
+
+export { addTaskToCard, editTask }
