@@ -32,7 +32,10 @@ const BoardSchema = new Schema<IBoard>(
   },
   {
     toJSON: {
-      virtuals: true
+      virtuals: true,
+      transform: function (doc, ret, game) {
+        delete ret.__v
+      }
     },
     versionKey: false
   }

@@ -35,7 +35,10 @@ const CardSchema = new Schema<ICard>(
   },
   {
     toJSON: {
-      virtuals: true
+      virtuals: true,
+      transform: function (doc, ret, game) {
+        delete ret.__v
+      }
     },
     versionKey: false
   }
