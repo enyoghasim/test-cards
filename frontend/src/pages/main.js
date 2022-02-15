@@ -4,8 +4,10 @@ import Board from "../Components/Board/Board";
 
 import "./main.css";
 import Editable from "../Components/Editabled/Editable";
+import { axiosGetInterface } from "../Util/axios";
 
 function App() {
+  const [boardsData, setBoardsData] = useState([]);
   const [boards, setBoards] = useState(
     JSON.parse(localStorage.getItem("prac-kanban")) || []
   );
@@ -117,9 +119,20 @@ function App() {
     setBoards(tempBoards);
   };
 
+  const fetchBoards = async () => {
+    const boardsData = await axiosGetInterface();
+    setBoardsData(boardsData ? boardsData.data : []);
+
+  }
+
   useEffect(() => {
     localStorage.setItem("prac-kanban", JSON.stringify(boards));
+
   }, [boards]);
+
+  useEffect(() => {
+    fetchBoards()
+  }, []);
 
   return (
     <div className="app">
