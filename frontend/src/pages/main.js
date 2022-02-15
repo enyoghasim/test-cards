@@ -8,9 +8,8 @@ import { axiosGetInterface } from "../Util/axios";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
-  const [boards, setBoards] = useState(
-    JSON.parse(localStorage.getItem("prac-kanban")) || []
-  );
+  const [isLoading,setIsloading] = useState(true);
+
 
   const [targetCard, setTargetCard] = useState({
     bid: "",
@@ -18,23 +17,23 @@ function App() {
   });
 
   const addboardHandler = (name) => {
-    const tempBoards = [...boards];
+    const tempBoards = [...boardsData];
     tempBoards.push({
       id: Date.now() + Math.random() * 2,
       title: name,
       cards: [],
     });
-    setBoards(tempBoards);
+    setBoardsData(tempBoards);
   };
 
   const removeBoard = (id) => {
-    const item = boards.filter((item) => item.id !== id);
-    setBoards(item);
+    const item = boardsData.filter((item) => item._id !== id);
+    setBoardsData(item);
   };
 
   const addCardHandler = (id, title) => {
-    const boardItems = boards.map((item) => {
-      if (item.id === id) {
+    const boardItems = boardsData.map((item) => {
+      if (item._id === id) {
         item.cards.push({
           id: Date.now() + Math.random() * 2,
           title,
@@ -47,15 +46,15 @@ function App() {
         return item;
       }
     });
-    setBoards(boardItems);
+    setBoardsData(boardItems);
   };
 
   const removeCard = (bid, cid) => {
-    const board = boards.find((item) => item.id === bid);
+    const board = boardsData.find((item) => item._id === bid);
 
-    const cards = board.cards.filter((item) => item.id !== cid);
-    const tempBoards = boards.map((item) => {
-      if (item.id === bid) {
+    const cards = board.cards.filter((item) => item._id !== cid);
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
         item.cards = cards;
         return item;
       } else {
@@ -63,32 +62,32 @@ function App() {
       }
     });
 
-    setBoards(tempBoards);
+    setBoardsData(tempBoards);
   };
 
   const dragEnded = (bid, cid) => {
     let s_boardIndex, s_cardIndex, t_boardIndex, t_cardIndex;
-    s_boardIndex = boards.findIndex((item) => item.id === bid);
+    s_boardIndex = boardsData.findIndex((item) => item._id === bid);
     if (s_boardIndex < 0) return;
 
-    s_cardIndex = boards[s_boardIndex]?.cards?.findIndex(
-      (item) => item.id === cid
+    s_cardIndex = boardsData[s_boardIndex]?.cards?.findIndex(
+      (item) => item._id === cid
     );
     if (s_cardIndex < 0) return;
 
-    t_boardIndex = boards.findIndex((item) => item.id === targetCard.bid);
+    t_boardIndex = boardsData.findIndex((item) => item._id === targetCard.bid);
     if (t_boardIndex < 0) return;
 
-    t_cardIndex = boards[t_boardIndex]?.cards?.findIndex(
-      (item) => item.id === targetCard.cid
+    t_cardIndex = boardsData[t_boardIndex]?.cards?.findIndex(
+      (item) => item._id === targetCard.cid
     );
     if (t_cardIndex < 0) return;
 
-    const tempBoards = [...boards];
+    const tempBoards = [...boardsData];
     const sourceCard = tempBoards[s_boardIndex].cards[s_cardIndex];
     tempBoards[s_boardIndex].cards.splice(s_cardIndex, 1);
     tempBoards[t_boardIndex].cards.splice(t_cardIndex, 0, sourceCard);
-    setBoards(tempBoards);
+    setBoardsData(tempBoards);
 
     setTargetCard({
       bid: "",
@@ -105,30 +104,27 @@ function App() {
   };
 
   const updateCard = (bid, cid, card) => {
-    const index = boards.findIndex((item) => item.id === bid);
+    const index = boardsData.findIndex((item) => item._id === bid);
     if (index < 0) return;
 
-    const tempBoards = [...boards];
+    const tempBoards = [...boardsData];
     const cards = tempBoards[index].cards;
 
-    const cardIndex = cards.findIndex((item) => item.id === cid);
+    const cardIndex = cards.findIndex((item) => item._id === cid);
     if (cardIndex < 0) return;
 
     tempBoards[index].cards[cardIndex] = card;
 
-    setBoards(tempBoards);
+    setBoardsData(tempBoards);
   };
 
   const fetchBoards = async () => {
-    const boardsData = await axiosGetInterface();
+    const boardsData = await axiosGetInterface('/get/board');
     setBoardsData(boardsData ? boardsData.data : []);
 
   }
 
-  useEffect(() => {
-    localStorage.setItem("prac-kanban", JSON.stringify(boards));
-
-  }, [boards]);
+ 
 
   useEffect(() => {
     fetchBoards()
@@ -141,12 +137,12 @@ function App() {
       </div>
       <div className="app_boards_container">
         <div className="app_boards">
-          {boards.map((item) => (
+          {boardsData.map((item) => (
             <Board
-              key={item.id}
+              key={item._id}
               board={item}
               addCard={addCardHandler}
-              removeBoard={() => removeBoard(item.id)}
+              removeBoard={() => removeBoard(item._id)}
               removeCard={removeCard}
               dragEnded={dragEnded}
               dragEntered={dragEntered}

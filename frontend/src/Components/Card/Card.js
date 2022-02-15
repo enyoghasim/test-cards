@@ -12,7 +12,7 @@ function Card(props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const { id, title, date, tasks, labels } = props.card;
+  const { _id, title, date, tasks, labels } = props.card;
 
   const formatDate = (value) => {
     if (!value) return "";
@@ -45,15 +45,15 @@ function Card(props) {
   useEffect(() => {
     if (!params.boardId || !props.boardId) {
       setShowModal(false)
-    } else if (!(Number(params.boardId) ===
-      Number(props.boardId)) ||
-      !(Number(params.cardId) ===
-        Number(id))) {
+    } else if (!((params.boardId) ===
+      (props.boardId)) ||
+      !((params.cardId) ===
+        (_id))) {
       setShowModal(false)
-    } else if ((Number(params.boardId) ===
-      Number(props.boardId)) ||
-      (Number(params.cardId) ===
-        Number(id))) {
+    } else if (((params.boardId) ===
+      (props.boardId)) ||
+      ((params.cardId) ===
+        (_id))) {
       setShowModal(true)
     }
   }, [params])
@@ -72,9 +72,9 @@ function Card(props) {
 
         className="card"
         draggable
-        onDragEnd={() => props.dragEnded(props.boardId, id)}
-        onDragEnter={() => props.dragEntered(props.boardId, id)}
-        onClick={() => navigate(`/${props.boardId}/${id}`)}
+        onDragEnd={() => props.dragEnded(props.boardId, _id)}
+        onDragEnter={() => props.dragEntered(props.boardId, _id)}
+        onClick={() => navigate(`/${props.boardId}/${_id}`)}
       >
         <div className="card_top">
           <div className="card_top_labels">
@@ -97,7 +97,7 @@ function Card(props) {
                 class="board_dropdown"
                 onClose={() => setShowDropdown(false)}
               >
-                <p onClick={() => props.removeCard(props.boardId, id)}>
+                <p onClick={() => props.removeCard(props.boardId, _id)}>
                   Delete Card
                 </p>
               </Dropdown>
