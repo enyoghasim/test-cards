@@ -42,22 +42,31 @@ function App() {
     setBoardActionInProgress(false);
   };
 
-  const addCardHandler = (id, title) => {
-    const boardItems = boardsData.map((item) => {
-      if (item._id === id) {
-        item.cards.push({
-          id: Date.now() + Math.random() * 2,
-          title,
-          labels: [],
-          date: "",
-          tasks: [],
-        });
-        return item;
-      } else {
-        return item;
+  const addCardHandler = async (id, title) => {
+ 
+
+    // const tempBoards = [...boardsData];
+    setBoardActionInProgress(true);
+    const addData = await axiosPostInterface(`/board/create/card?boardObjectId=${id}`, {
+      cardOption: {
+        title: title,
+
       }
-    });
-    setBoardsData(boardItems);
+    })
+
+    if (addData.status === 200 && addData.data) {
+      const tempBoards = boardsData.map((item) => {
+        if (item._id === id) {
+          item.cards.push(addData.data.data);
+          return item;
+        } else {
+          return item;
+        }
+      });
+    setBoardsData(tempBoards);
+
+    }
+    setBoardActionInProgress(false);
   };
 
   const removeCard = (bid, cid) => {
@@ -167,7 +176,7 @@ function App() {
       </div>
       <div className="app_boards_container">
         <div className="app_boards">
-          {boardsData.map((item) => (
+          {boardsData && boardsData.length && boardsData.map((item) => (
             <Board
               key={item._id}
               board={item}
