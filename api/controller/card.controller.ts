@@ -45,6 +45,17 @@ const addCardToBoard = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
+const editCard = async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    const updatedData = req.body.boardEditOption
+    const { cardObjectId } = req.query
+    const data = (await Cards.findOneAndUpdate({ _id: cardObjectId }, updatedData)) as any
+    res.status(200).json({ message: 'edited card successful', status: 200, data: { ...data?._doc, ...updatedData } })
+  } catch (err) {
+    res.status(500).json({ message: 'edited card failed', status: 500, error: err })
+  }
+}
+
 const addLabelToCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { labelOption } = req.body
@@ -85,13 +96,19 @@ const moveCardWithinBoard = async (req: Request, res: Response, next: NextFuncti
     const { optionData } = req.body as IwithinOptionData
     const { boardId, cardId, newPosIndex } = optionData
 
-    await Boards.findById({ _id: boardId }, async (err, docs) => {
-      const newCards = arraymove(docs?.cards, docs?.cards.indexOf(cardId, 0), newPosIndex)
+    // await Boards.findById({ _id: boardId }, async (err, docs) => {
+    //   const newCards = arraymove(docs?.cards, docs?.cards.indexOf(cardId, 0), newPosIndex);
 
-      await Boards.updateOne({ _id: boardId }, {})
+    //   await Boards.updateOne(
+    //     { _id: boardId },
+    //     {
+    //       $set: {
+    //         cards: newCards,
+    //       },
+    //     }
+    //   );
 
-      console.log('>>>>>>>', newCards)
-    })
+    // });
 
     logger.info('move card controller')
   } catch (err) {
@@ -129,4 +146,4 @@ const deleteCardFromBoard = async (req: Request, res: Response, next: NextFuncti
   }
 }
 
-export { addCardToBoard, moveCardFromBoards, moveCardWithinBoard, addLabelToCard, deleteCardFromBoard }
+export { addCardToBoard, editCard, moveCardFromBoards, moveCardWithinBoard, addLabelToCard, deleteCardFromBoard }

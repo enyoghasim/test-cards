@@ -2,7 +2,7 @@ import { Schema, model, Model } from 'mongoose'
 import { v4 } from 'uuid'
 import { logger } from '../service/logger'
 
-interface IBoard {
+export interface IBoard {
   id: string;
   title: string;
   description: string;
