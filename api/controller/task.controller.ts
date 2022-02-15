@@ -17,12 +17,11 @@ const addTaskToCard = async (req: Request, res: Response, next: NextFunction) =>
         { $push: { tasks: result._id } },
         { new: true, useFindAndModify: false }
       )
-
       logger.info(card)
-      res.status(200).send('add created task to card successful')
+      res.status(200).json({ message: 'add created task to card successful', status: 200, data: card })
     })
   } catch (err) {
-    res.status(500).send(err)
+    res.status(500).json({ message: 'unable to created task to card successful', status: 500, error: err })
   }
 }
 
