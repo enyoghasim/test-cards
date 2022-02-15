@@ -1,5 +1,5 @@
 import express, { Application, Request, Response, NextFunction } from 'express'
-import Boards from '../model/board.model'
+import Boards, { IBoard } from '../model/board.model'
 import LabelModel from '../model/label.model'
 import TaskModel from '../model/task.model'
 import { logger } from '../service/logger'
@@ -50,4 +50,15 @@ const createBoard = async function (req: Request, res: Response, next: NextFunct
   }
 }
 
-export { createBoard, getBoard }
+const editBoard = async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    const updatedData = req.body.boardEditOption
+    const { boardObjectId } = req.query
+    const data = (await Boards.findOneAndUpdate({ _id: boardObjectId }, updatedData)) as any
+    res.status(200).json({ message: 'edited board successful', status: 200, data: { ...data?._doc, ...updatedData } })
+  } catch (err) {
+    res.status(500).json({ message: 'edited board failed', status: 500, error: err })
+  }
+}
+
+export { createBoard, getBoard, editBoard }
