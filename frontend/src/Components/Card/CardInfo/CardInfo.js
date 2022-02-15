@@ -174,7 +174,7 @@ function CardInfo(props) {
                 key={index}
                 style={{ backgroundColor: item.color, color: "#fff" }}
               >
-                {item.text}
+                {item.title}
                 <X onClick={() => removeLabel(item)} />
               </label>
             ))}
@@ -222,7 +222,7 @@ function CardInfo(props) {
                     updateTask(item.id, event.target.checked)
                   }
                 />
-                <p className={item.completed ? "completed" : ""}>{item.text}</p>
+                <p className={item.completed ? "completed" : ""}>{item.title}</p>
                 <Trash onClick={() => removeTask(item.id)} />
               </div>
             ))}

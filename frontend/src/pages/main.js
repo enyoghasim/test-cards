@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 import Board from "../Components/Board/Board";
 
@@ -8,7 +9,7 @@ import { axiosGetInterface } from "../Util/axios";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
-  const [isLoading,setIsloading] = useState(true);
+  const [isLoading, setIsloading] = useState(false);
 
 
   const [targetCard, setTargetCard] = useState({
@@ -119,12 +120,30 @@ function App() {
   };
 
   const fetchBoards = async () => {
+    setIsloading(true);
     const boardsData = await axiosGetInterface('/get/board');
     setBoardsData(boardsData ? boardsData.data : []);
+    setIsloading(false);
 
   }
 
- 
+  const LoaderOverlay = ({ isOpen }) => {
+    const mount = document.getElementById("portal-root");
+    const el = document.createElement("div");
+
+    useEffect(() => {
+      mount.appendChild(el);
+      return () => mount.removeChild(el);
+    }, [el, mount]);
+
+    return createPortal((isOpen && <>
+      <div className="loader-overlay">
+        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      </div>
+    </>), el)
+  }
+
+
 
   useEffect(() => {
     fetchBoards()
@@ -132,6 +151,7 @@ function App() {
 
   return (
     <div className="app">
+      <LoaderOverlay isOpen={isLoading}></LoaderOverlay>
       <div className="app_nav">
         <h1>Kanban Board</h1>
       </div>
