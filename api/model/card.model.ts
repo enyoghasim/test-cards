@@ -51,6 +51,6 @@ CardSchema.pre('save', function (next) {
   next()
 })
 
-const Card: any = model<ICard>('Card', CardSchema)
+const Card: any = model<ICard>('Cards', CardSchema)
 
 export default Card
