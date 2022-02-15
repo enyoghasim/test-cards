@@ -38,9 +38,9 @@ const createBoard = async function (req: Request, res: Response, next: NextFunct
     const board = new Boards(req?.body?.boardOption)
     board
       .save()
-      .then((result) => {
-        logger.info(result)
-        res.status(200).json({ status: 200 })
+      .then((data) => {
+        logger.info(data)
+        res.status(200).json({ status: 200, data })
       })
       .catch((err) => {
         res.status(500).json(err)

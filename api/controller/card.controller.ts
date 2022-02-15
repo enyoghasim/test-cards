@@ -38,10 +38,10 @@ const addCardToBoard = async (req: Request, res: Response, next: NextFunction) =
       )
 
       logger.info(board)
-      res.status(200).send('add created card to board successful')
+      res.status(200).json({ message: 'add created card to board successful', status: 200, data: board })
     })
   } catch (err) {
-    res.status(500).json(err)
+    res.status(500).json({ message: 'unable to add card to board successful', status: 500, error: err })
   }
 }
 
@@ -60,11 +60,11 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
         { new: true, useFindAndModify: false }
       )
       logger.info(card)
-      res.status(200).send('add created label to card successful')
+      res.status(200).json({ message: 'add label to card successful', status: 200, data: card })
     })
   } catch (err) {
     logger.error(err)
-    res.status(500).json(err)
+    res.status(500).json({ message: 'unable to add label to card successful', status: 500, error: err })
   }
 }
 
@@ -85,8 +85,12 @@ const moveCardWithinBoard = async (req: Request, res: Response, next: NextFuncti
     const { optionData } = req.body as IwithinOptionData
     const { boardId, cardId, newPosIndex } = optionData
 
-    await Boards.findById({ _id: boardId }, (err, docs) => {
-      const newCourses = arraymove(docs?.cards, docs?.cards.indexOf(cardId, 0), newPosIndex)
+    await Boards.findById({ _id: boardId }, async (err, docs) => {
+      const newCards = arraymove(docs?.cards, docs?.cards.indexOf(cardId, 0), newPosIndex)
+
+      await Boards.updateOne({ _id: boardId }, {})
+
+      console.log('>>>>>>>', newCards)
     })
 
     logger.info('move card controller')
@@ -118,10 +122,10 @@ const deleteCardFromBoard = async (req: Request, res: Response, next: NextFuncti
         )
       })
 
-      res.status(200).send('deleted card from board successful')
+      res.status(200).json({ message: 'deleted card from board successful', status: 200, data: deleted })
     }
   } catch (err) {
-    res.status(500).json(err)
+    res.status(500).json({ message: 'unable to delete card successfully', status: 500, error: err })
   }
 }
 
