@@ -1,4 +1,4 @@
-import { Schema, Model, model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { v4 } from 'uuid'
 import { logger } from '../service/logger'
 

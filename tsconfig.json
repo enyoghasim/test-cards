@@ -12,6 +12,6 @@
     "sourceMap": true,
     "noImplicitAny": false
   },
-  "include": ["api/**/*"],
+  "include": ["api/**/*", "api/configuration/swagger.ts"],
   "exclude": ["tests/**/*"]
 }

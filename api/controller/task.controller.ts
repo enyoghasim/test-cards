@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import Card from '../model/card.model'
+import Cards from '../model/card.model'
 import TaskModel from '../model/task.model'
 import { logger } from '../service/logger'
 
@@ -12,7 +12,7 @@ const addTaskToCard = async (req: Request, res: Response, next: NextFunction) =>
     const task = new TaskModel(taskOptionpayload)
 
     await task.save().then(async (result) => {
-      const card = await Card.findByIdAndUpdate(
+      const card = await Cards.findByIdAndUpdate(
         req?.query?.cardObjectId,
         { $push: { tasks: result._id } },
         { new: true, useFindAndModify: false }
