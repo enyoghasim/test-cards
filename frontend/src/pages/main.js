@@ -5,7 +5,7 @@ import Board from "../Components/Board/Board";
 
 import "./main.css";
 import Editable from "../Components/Editabled/Editable";
-import { axiosGetInterface } from "../Util/axios";
+import { axiosGetInterface, axiosPostInterface } from "../Util/axios";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
@@ -17,14 +17,22 @@ function App() {
     cid: "",
   });
 
-  const addboardHandler = (name) => {
+  const addboardHandler = async (name) => {
     const tempBoards = [...boardsData];
+    const addData = await axiosPostInterface('/create/board', {
+      boardOption : {
+        title: name,
+        
+      }
+    })
     tempBoards.push({
       id: Date.now() + Math.random() * 2,
       title: name,
       cards: [],
     });
     setBoardsData(tempBoards);
+
+
   };
 
   const removeBoard = (id) => {
@@ -138,7 +146,7 @@ function App() {
 
     return createPortal((isOpen && <>
       <div className="loader-overlay">
-        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div className="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
       </div>
     </>), el)
   }

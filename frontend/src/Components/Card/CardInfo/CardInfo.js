@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams,Link} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import {
   Calendar,
   CheckSquare,
@@ -109,14 +109,14 @@ function CardInfo(props) {
       date,
     });
   };
-  const params = useParams() 
+  const params = useParams()
 
   useEffect(() => {
     //  return navigate.listen((location) => { 
     //     console.log(`You changed the page to: ${location.pathname}`) 
     //  }) 
     console.log(params);
-  },[params]) 
+  }, [params])
   useEffect(() => {
     if (props.updateCard) props.updateCard(props.boardId, values.id, values);
   }, [values]);
