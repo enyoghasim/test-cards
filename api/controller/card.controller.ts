@@ -67,14 +67,17 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
 
     const label = new LabelModel(labelOptionpayload)
 
+    let labelData
+
     await label.save().then(async (result) => {
+      labelData = result
       const card = await Cards.findByIdAndUpdate(
         req?.query?.cardObjectId,
         { $push: { labels: result._id } },
         { new: true, useFindAndModify: false }
       )
       logger.info(card)
-      res.status(200).json({ message: 'add label to card successful', status: 200, data: card })
+      res.status(200).json({ message: 'add label to card successful', status: 200, data: labelData })
     })
   } catch (err) {
     logger.error(err)

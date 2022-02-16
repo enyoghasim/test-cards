@@ -14,6 +14,7 @@ import Modal from "../../Modal/Modal";
 import Editable from "../../Editabled/Editable";
 
 import "./CardInfo.css";
+import { axiosPostInterface } from "../../../Util/axios";
 
 function CardInfo(props) {
   const colors = [
@@ -39,15 +40,28 @@ function CardInfo(props) {
     setValues({ ...values, desc: value });
   };
 
-  const addLabel = (label) => {
+  const addLabel = async (label) => {
     const index = values.labels.findIndex((item) => item.text === label.text);
     if (index > -1) return;
 
+    const labelData = await axiosPostInterface(`card/create/label?cardObjectId=${props.card._id}`, {
+      labelOption: {
+        title: label.text,
+        color: label.color || '#a8193d'
+      }
+    })
+
     setSelectedColor("");
-    setValues({
-      ...values,
-      labels: [...values.labels, label],
-    });
+
+    if (labelData && labelData.status === 200) {
+
+      console.log(labelData);
+
+      setValues({
+        ...values,
+        labels: [...values.labels, labelData.data.data],
+      });
+    }
   };
 
   const removeLabel = (label) => {
@@ -59,16 +73,23 @@ function CardInfo(props) {
     });
   };
 
-  const addTask = (value) => {
-    const task = {
-      id: Date.now() + Math.random() * 2,
-      completed: false,
-      text: value,
-    };
-    setValues({
-      ...values,
-      tasks: [...values.tasks, task],
-    });
+  const addTask =async (value) => {
+  
+    const taskData = await axiosPostInterface(`card/create/task?cardObjectId=${props.card._id}`, {
+      taskOption:{
+        title:value,
+        completed:false
+    }
+    })
+
+    if (taskData && taskData.status === 200) {
+
+
+      setValues({
+        ...values,
+        tasks: [...values.tasks, task],
+      });
+    }
   };
 
   const removeTask = (id) => {
@@ -115,7 +136,6 @@ function CardInfo(props) {
     //  return navigate.listen((location) => { 
     //     console.log(`You changed the page to: ${location.pathname}`) 
     //  }) 
-    console.log(params);
   }, [params])
   useEffect(() => {
     if (props.updateCard) props.updateCard(props.boardId, values.id, values);
