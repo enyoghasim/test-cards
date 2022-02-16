@@ -23,7 +23,10 @@ const CardSchema = new Schema<ICard>(
     },
     title: {
       type: String,
-      required: true
+      index: { unique: true, sparse: true },
+      required: true,
+      lowercase: true,
+      trim: true
     },
     description: {
       type: String

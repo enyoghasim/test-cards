@@ -24,7 +24,10 @@ const TaskSchema = new Schema<ITask>(
     },
     title: {
       type: String,
-      required: true
+      index: { unique: true, sparse: true },
+      required: true,
+      lowercase: true,
+      trim: true
     },
     completed: {
       type: Boolean,

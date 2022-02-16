@@ -19,7 +19,10 @@ const BoardSchema = new Schema<IBoard>(
     },
     title: {
       type: String,
-      required: true
+      index: { unique: true, sparse: true },
+      required: true,
+      lowercase: true,
+      trim: true
     },
     description: {
       type: String,

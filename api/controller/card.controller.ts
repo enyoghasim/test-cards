@@ -4,6 +4,7 @@ import { logger } from '../service/logger'
 import { NextFunction, Request, Response } from 'express'
 import LabelModel from '../model/label.model'
 import TaskModel from '../model/task.model'
+import { Console } from 'console'
 
 type IoptionData = {
   optionData: {
@@ -96,17 +97,15 @@ const moveCardWithinBoard = async (req: Request, res: Response, next: NextFuncti
     const { optionData } = req.body as IwithinOptionData
     const { boardId, cardId, newPosIndex } = optionData
 
+    const nr = await Boards.findByIdAndUpdate({ _id: boardId })
+
+    // console.log("?????????????????",nr?.cards)
+
     // await Boards.findById({ _id: boardId }, async (err, docs) => {
+
     //   const newCards = arraymove(docs?.cards, docs?.cards.indexOf(cardId, 0), newPosIndex);
 
-    //   await Boards.updateOne(
-    //     { _id: boardId },
-    //     {
-    //       $set: {
-    //         cards: newCards,
-    //       },
-    //     }
-    //   );
+    //   console.log("?????????",nr)
 
     // });
 

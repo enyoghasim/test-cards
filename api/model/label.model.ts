@@ -23,7 +23,10 @@ const LabelSchema = new Schema<ILabel>(
     },
     title: {
       type: String,
-      required: true
+      index: { unique: true, sparse: true },
+      required: true,
+      lowercase: true,
+      trim: true
     },
     color: {
       type: String,
