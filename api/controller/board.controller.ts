@@ -65,6 +65,9 @@ const editBoard = async function (req: Request, res: Response, next: NextFunctio
 const deleteBoard = async function (req: Request, res: Response, next: NextFunction) {
   try {
     logger.info(res)
+    // delete the board first
+    // then delete the board list of  cards
+    //  then delete the board
   } catch (err) {
     logger.error(err)
   }
