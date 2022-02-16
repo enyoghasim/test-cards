@@ -65,7 +65,7 @@ function CardInfo(props) {
   };
 
   const removeLabel = (label) => {
-    const tempLabels = values.labels.filter((item) => item.text !== label.text);
+    const tempLabels = values.labels.filter((item) => item._id !== label._id);
 
     setValues({
       ...values,
@@ -87,7 +87,7 @@ function CardInfo(props) {
 
       setValues({
         ...values,
-        tasks: [...values.tasks, task],
+        tasks: [...values.tasks, taskData.data.data],
       });
     }
   };
