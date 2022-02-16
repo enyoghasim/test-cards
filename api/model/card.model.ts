@@ -23,7 +23,10 @@ const CardSchema = new Schema<ICard>(
     },
     title: {
       type: String,
-      required: true
+      index: { unique: true, sparse: true },
+      required: true,
+      lowercase: true,
+      trim: true
     },
     description: {
       type: String
@@ -35,8 +38,12 @@ const CardSchema = new Schema<ICard>(
   },
   {
     toJSON: {
-      virtuals: true
-    }
+      virtuals: true,
+      transform: function (doc, ret, game) {
+        delete ret.__v
+      }
+    },
+    versionKey: false
   }
 )
 

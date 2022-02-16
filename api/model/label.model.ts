@@ -23,7 +23,10 @@ const LabelSchema = new Schema<ILabel>(
     },
     title: {
       type: String,
-      required: true
+      index: { unique: true, sparse: true },
+      required: true,
+      lowercase: true,
+      trim: true
     },
     color: {
       type: String,
@@ -34,8 +37,12 @@ const LabelSchema = new Schema<ILabel>(
   },
   {
     toJSON: {
-      virtuals: true
-    }
+      virtuals: true,
+      transform: function (doc, ret, game) {
+        delete ret.__v
+      }
+    },
+    versionKey: false
   }
 )
 

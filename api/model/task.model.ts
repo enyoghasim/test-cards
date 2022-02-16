@@ -24,7 +24,10 @@ const TaskSchema = new Schema<ITask>(
     },
     title: {
       type: String,
-      required: true
+      index: { unique: true, sparse: true },
+      required: true,
+      lowercase: true,
+      trim: true
     },
     completed: {
       type: Boolean,
@@ -35,8 +38,12 @@ const TaskSchema = new Schema<ITask>(
   },
   {
     toJSON: {
-      virtuals: true
-    }
+      virtuals: true,
+      transform: function (doc, ret, game) {
+        delete ret.__v
+      }
+    },
+    versionKey: false
   }
 )
 

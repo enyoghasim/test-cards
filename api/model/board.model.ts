@@ -19,7 +19,10 @@ const BoardSchema = new Schema<IBoard>(
     },
     title: {
       type: String,
-      required: true
+      index: { unique: true, sparse: true },
+      required: true,
+      lowercase: true,
+      trim: true
     },
     description: {
       type: String,
@@ -32,8 +35,12 @@ const BoardSchema = new Schema<IBoard>(
   },
   {
     toJSON: {
-      virtuals: true
-    }
+      virtuals: true,
+      transform: function (doc, ret, game) {
+        delete ret.__v
+      }
+    },
+    versionKey: false
   }
 )
 
