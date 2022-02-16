@@ -30,7 +30,9 @@ const arraymove = (arr, fromIndex, toIndex) => {
 
 const addCardToBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const card = new Cards(req.body.cardOption)
+    const { cardOption } = req.body
+    const labelOptionpayload = { ...cardOption, boardRefId: req?.query?.boardObjectId }
+    const card = new Cards(labelOptionpayload)
     let cardData
     await card.save().then(async (result) => {
       cardData = result

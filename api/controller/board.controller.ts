@@ -35,7 +35,8 @@ const getBoard = async function (req: Request, res: Response, next: NextFunction
 
 const createBoard = async function (req: Request, res: Response, next: NextFunction) {
   try {
-    const board = new Boards(req?.body?.boardOption)
+    const { boardOption } = req?.body
+    const board = new Boards(boardOption)
     board
       .save()
       .then((data) => {
@@ -61,4 +62,9 @@ const editBoard = async function (req: Request, res: Response, next: NextFunctio
   }
 }
 
-export { createBoard, getBoard, editBoard }
+// const deleteBoard = async function (req: Request, res: Response, next: NextFunction) {
+//   try {
+//   } catch (err) {}
+// };
+
+export { createBoard, getBoard, editBoard, deleteBoard }
