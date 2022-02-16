@@ -66,6 +66,8 @@ function Card(props) {
           card={props.card}
           boardId={props.boardId}
           updateCard={props.updateCard}
+          deleteLabel={props.deleteLabel}
+          deleteTask={props.deleteTask}
         />
       )}
       <div

@@ -42,6 +42,47 @@ function App() {
     setBoardActionInProgress(false);
   };
 
+  const deleteTaskFromCard = async (tid, cid, bid) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        const iTasks = item.tasks.filter(task => task._id !== tid)
+        item.tasks = iTasks;
+        return item
+      }
+      return item
+    });
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
+
+  }
+
+  const deleteLabelFromCard = async (lid, cid, bid) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        const iLabels = item.labels.filter(task => task._id !== lid)
+        item.labels = iLabels;
+        return item
+      }
+      return item
+    });
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
+  }
+
   const addCardHandler = async (id, title) => {
     setBoardActionInProgress(true);
     const addData = await axiosPostInterface(`/board/create/card?boardObjectId=${id}`, {
@@ -185,6 +226,8 @@ function App() {
               dragEnded={dragEnded}
               dragEntered={dragEntered}
               updateCard={updateCard}
+              deleteLabel={deleteLabelFromCard}
+              deleteTask={deleteTaskFromCard}
             />
           ))}
           <div className="app_boards_last">

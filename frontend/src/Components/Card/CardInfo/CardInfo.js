@@ -71,15 +71,16 @@ function CardInfo(props) {
       ...values,
       labels: tempLabels,
     });
+    props.deleteLabel(label._id, props.card._id, props.boardId)
   };
 
-  const addTask =async (value) => {
-  
+  const addTask = async (value) => {
+
     const taskData = await axiosPostInterface(`card/create/task?cardObjectId=${props.card._id}`, {
-      taskOption:{
-        title:value,
-        completed:false
-    }
+      taskOption: {
+        title: value,
+        completed: false
+      }
     })
 
     if (taskData && taskData.status === 200) {
@@ -95,11 +96,12 @@ function CardInfo(props) {
   const removeTask = (id) => {
     const tasks = [...values.tasks];
 
-    const tempTasks = tasks.filter((item) => item.id !== id);
+    const tempTasks = tasks.filter((item) => item._id !== id);
     setValues({
       ...values,
       tasks: tempTasks,
     });
+    props.deleteTask(id, props.card._id, props.boardId)
   };
 
   const updateTask = (id, value) => {
@@ -133,10 +135,11 @@ function CardInfo(props) {
   const params = useParams()
 
   useEffect(() => {
+    console.log(props);
     //  return navigate.listen((location) => { 
     //     console.log(`You changed the page to: ${location.pathname}`) 
     //  }) 
-  }, [params])
+  }, [props])
   useEffect(() => {
     if (props.updateCard) props.updateCard(props.boardId, values.id, values);
   }, [values]);
@@ -243,7 +246,7 @@ function CardInfo(props) {
                   }
                 />
                 <p className={item.completed ? "completed" : ""}>{item.title}</p>
-                <Trash onClick={() => removeTask(item.id)} />
+                <Trash onClick={() => removeTask(item._id)} />
               </div>
             ))}
           </div>
