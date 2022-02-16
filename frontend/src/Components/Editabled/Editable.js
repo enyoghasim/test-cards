@@ -5,7 +5,7 @@ import { X } from "react-feather";
 import "./Editable.css";
 
 function Editable(props) {
-  const [isEditable, setIsEditable] = useState(false);
+  const [isEditable, setIsEditable] = useState(props.editable || false);
   const [inputText, setInputText] = useState(props.defaultValue || "");
 
   const submission = (e) => {
@@ -30,17 +30,20 @@ function Editable(props) {
             placeholder={props.placeholder || props.text}
             onChange={(event) => setInputText(event.target.value)}
             autoFocus
+            disabled={props.disabled}
           />
           <div className="editable_edit_footer">
-            <button type="submit">{props.buttonText || "Add"}</button>
+            <button type="submit"
+              disabled={props.disabled}
+
+            >{props.buttonText || "Add"}</button>
             <X onClick={() => setIsEditable(false)} className="closeIcon" />
           </div>
         </form>
       ) : (
         <p
-          className={`editable_display ${
-            props.displayClass ? props.displayClass : ""
-          }`}
+          className={`editable_display ${props.displayClass ? props.displayClass : ""
+            }`}
           onClick={() => setIsEditable(true)}
         >
           {props.text}

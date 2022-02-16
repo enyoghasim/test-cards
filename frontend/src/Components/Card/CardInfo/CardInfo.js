@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams,Link} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import {
   Calendar,
   CheckSquare,
@@ -109,14 +109,14 @@ function CardInfo(props) {
       date,
     });
   };
-  const params = useParams() 
+  const params = useParams()
 
   useEffect(() => {
     //  return navigate.listen((location) => { 
     //     console.log(`You changed the page to: ${location.pathname}`) 
     //  }) 
     console.log(params);
-  },[params]) 
+  }, [params])
   useEffect(() => {
     if (props.updateCard) props.updateCard(props.boardId, values.id, values);
   }, [values]);
@@ -174,7 +174,7 @@ function CardInfo(props) {
                 key={index}
                 style={{ backgroundColor: item.color, color: "#fff" }}
               >
-                {item.text}
+                {item.title}
                 <X onClick={() => removeLabel(item)} />
               </label>
             ))}
@@ -214,7 +214,7 @@ function CardInfo(props) {
           </div>
           <div className="cardinfo_box_task_list">
             {values.tasks?.map((item) => (
-              <div key={item.id} className="cardinfo_box_task_checkbox">
+              <div key={item._id} className="cardinfo_box_task_checkbox">
                 <input
                   type="checkbox"
                   defaultChecked={item.completed}
@@ -222,7 +222,7 @@ function CardInfo(props) {
                     updateTask(item.id, event.target.checked)
                   }
                 />
-                <p className={item.completed ? "completed" : ""}>{item.text}</p>
+                <p className={item.completed ? "completed" : ""}>{item.title}</p>
                 <Trash onClick={() => removeTask(item.id)} />
               </div>
             ))}

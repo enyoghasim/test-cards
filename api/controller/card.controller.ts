@@ -31,7 +31,9 @@ const arraymove = (arr, fromIndex, toIndex) => {
 const addCardToBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const card = new Cards(req.body.cardOption)
+    let cardData
     await card.save().then(async (result) => {
+      cardData = result
       const board = await Boards.findByIdAndUpdate(
         req?.query?.boardObjectId,
         { $push: { cards: result._id } },
@@ -39,7 +41,7 @@ const addCardToBoard = async (req: Request, res: Response, next: NextFunction) =
       )
 
       logger.info(board)
-      res.status(200).json({ message: 'add created card to board successful', status: 200, data: board })
+      res.status(200).json({ message: 'add created card to board successful', status: 200, data: cardData })
     })
   } catch (err) {
     res.status(500).json({ message: 'unable to add card to board successful', status: 500, error: err })

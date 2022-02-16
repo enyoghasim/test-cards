@@ -1,92 +1,112 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 import Board from "../Components/Board/Board";
 
 import "./main.css";
 import Editable from "../Components/Editabled/Editable";
+import { axiosGetInterface, axiosPostInterface, axiosDeleteInterface } from "../Util/axios";
 
 function App() {
-  const [boards, setBoards] = useState(
-    JSON.parse(localStorage.getItem("prac-kanban")) || []
-  );
+  const [boardsData, setBoardsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [boardActionInProgress, setBoardActionInProgress] = useState(false);
+
 
   const [targetCard, setTargetCard] = useState({
     bid: "",
     cid: "",
   });
 
-  const addboardHandler = (name) => {
-    const tempBoards = [...boards];
-    tempBoards.push({
-      id: Date.now() + Math.random() * 2,
-      title: name,
-      cards: [],
-    });
-    setBoards(tempBoards);
+  const addboardHandler = async (name) => {
+    const tempBoards = [...boardsData];
+    setBoardActionInProgress(true);
+    const addData = await axiosPostInterface('/create/board', {
+      boardOption: {
+        title: name,
+
+      }
+    })
+    if (addData.status === 200 && addData.data) {
+      tempBoards.push(addData.data.data);
+      setBoardsData(tempBoards);
+    }
+    setBoardActionInProgress(false);
   };
 
   const removeBoard = (id) => {
-    const item = boards.filter((item) => item.id !== id);
-    setBoards(item);
+    const item = boardsData.filter((item) => item._id !== id);
+    setBoardActionInProgress(true);
+    setBoardsData(item);
+
+    setBoardActionInProgress(false);
   };
 
-  const addCardHandler = (id, title) => {
-    const boardItems = boards.map((item) => {
-      if (item.id === id) {
-        item.cards.push({
-          id: Date.now() + Math.random() * 2,
-          title,
-          labels: [],
-          date: "",
-          tasks: [],
-        });
-        return item;
-      } else {
-        return item;
+  const addCardHandler = async (id, title) => {
+    setBoardActionInProgress(true);
+    const addData = await axiosPostInterface(`/board/create/card?boardObjectId=${id}`, {
+      cardOption: {
+        title: title,
+
       }
-    });
-    setBoards(boardItems);
+    })
+
+    if (addData.status === 200 && addData.data) {
+      const tempBoards = boardsData.map((item) => {
+        if (item._id === id) {
+          item.cards.push(addData.data.data);
+          return item;
+        } else {
+          return item;
+        }
+      });
+      setBoardsData(tempBoards);
+
+    }
+    setBoardActionInProgress(false);
   };
 
-  const removeCard = (bid, cid) => {
-    const board = boards.find((item) => item.id === bid);
+  const removeCard = async (bid, cid) => {
+    const board = boardsData.find((item) => item._id === bid);
 
-    const cards = board.cards.filter((item) => item.id !== cid);
-    const tempBoards = boards.map((item) => {
-      if (item.id === bid) {
+    const cards = board.cards.filter((item) => item._id !== cid);
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
         item.cards = cards;
         return item;
       } else {
         return item;
       }
     });
-
-    setBoards(tempBoards);
+    setBoardsData(tempBoards);
+    setBoardActionInProgress(true);
+    await axiosDeleteInterface(`/board/delete/card?cardId=${cid}`)
+    setBoardActionInProgress(false);
   };
 
   const dragEnded = (bid, cid) => {
     let s_boardIndex, s_cardIndex, t_boardIndex, t_cardIndex;
-    s_boardIndex = boards.findIndex((item) => item.id === bid);
+    s_boardIndex = boardsData.findIndex((item) => item._id === bid);
     if (s_boardIndex < 0) return;
 
-    s_cardIndex = boards[s_boardIndex]?.cards?.findIndex(
-      (item) => item.id === cid
+    s_cardIndex = boardsData[s_boardIndex]?.cards?.findIndex(
+      (item) => item._id === cid
     );
     if (s_cardIndex < 0) return;
 
-    t_boardIndex = boards.findIndex((item) => item.id === targetCard.bid);
+    t_boardIndex = boardsData.findIndex((item) => item._id === targetCard.bid);
     if (t_boardIndex < 0) return;
 
-    t_cardIndex = boards[t_boardIndex]?.cards?.findIndex(
-      (item) => item.id === targetCard.cid
+    t_cardIndex = boardsData[t_boardIndex]?.cards?.findIndex(
+      (item) => item._id === targetCard.cid
     );
     if (t_cardIndex < 0) return;
 
-    const tempBoards = [...boards];
+    const tempBoards = [...boardsData];
     const sourceCard = tempBoards[s_boardIndex].cards[s_cardIndex];
     tempBoards[s_boardIndex].cards.splice(s_cardIndex, 1);
     tempBoards[t_boardIndex].cards.splice(t_cardIndex, 0, sourceCard);
-    setBoards(tempBoards);
+    setBoardsData(tempBoards);
 
     setTargetCard({
       bid: "",
@@ -103,37 +123,64 @@ function App() {
   };
 
   const updateCard = (bid, cid, card) => {
-    const index = boards.findIndex((item) => item.id === bid);
+    const index = boardsData.findIndex((item) => item._id === bid);
     if (index < 0) return;
 
-    const tempBoards = [...boards];
+    const tempBoards = [...boardsData];
     const cards = tempBoards[index].cards;
 
-    const cardIndex = cards.findIndex((item) => item.id === cid);
+    const cardIndex = cards.findIndex((item) => item._id === cid);
     if (cardIndex < 0) return;
 
     tempBoards[index].cards[cardIndex] = card;
 
-    setBoards(tempBoards);
+    setBoardsData(tempBoards);
   };
 
+  const fetchBoards = async () => {
+    setIsLoading(true);
+    const boardsData = await axiosGetInterface('/get/board');
+    setBoardsData(boardsData ? boardsData.data : []);
+    setIsLoading(false);
+
+  }
+
+  const LoaderOverlay = ({ isOpen }) => {
+    const mount = document.getElementById("portal-root");
+    const el = document.createElement("div");
+
+    useEffect(() => {
+      mount.appendChild(el);
+      return () => mount.removeChild(el);
+    }, [el, mount]);
+
+    return createPortal((isOpen && <>
+      <div className="loader-overlay">
+        <div className="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      </div>
+    </>), el)
+  }
+
+
+
   useEffect(() => {
-    localStorage.setItem("prac-kanban", JSON.stringify(boards));
-  }, [boards]);
+    fetchBoards()
+  }, []);
 
   return (
     <div className="app">
+      <LoaderOverlay isOpen={isLoading}></LoaderOverlay>
       <div className="app_nav">
         <h1>Kanban Board</h1>
       </div>
       <div className="app_boards_container">
         <div className="app_boards">
-          {boards.map((item) => (
+          {boardsData && boardsData.length && boardsData.map((item) => (
             <Board
-              key={item.id}
+              key={item._id}
               board={item}
               addCard={addCardHandler}
-              removeBoard={() => removeBoard(item.id)}
+              removeBoard={() => removeBoard(item._id)}
               removeCard={removeCard}
               dragEnded={dragEnded}
               dragEntered={dragEntered}
@@ -148,6 +195,7 @@ function App() {
               text="Add Board"
               buttonText="Add Board"
               onSubmit={addboardHandler}
+              disabled={boardActionInProgress}
             />
           </div>
         </div>
