@@ -10,15 +10,16 @@ const addTaskToCard = async (req: Request, res: Response, next: NextFunction) =>
     const taskOptionpayload = { ...taskOption, cardRefId: req?.query?.cardObjectId }
 
     const task = new TaskModel(taskOptionpayload)
-
+    let taskData
     await task.save().then(async (result) => {
+      taskData = result
       const card = await Cards.findByIdAndUpdate(
         req?.query?.cardObjectId,
         { $push: { tasks: result._id } },
         { new: true, useFindAndModify: false }
       )
       logger.info(card)
-      res.status(200).json({ message: 'add created task to card successful', status: 200, data: card })
+      res.status(200).json({ message: 'add created task to card successful', status: 200, data: taskData })
     })
   } catch (err) {
     res.status(500).json({ message: 'unable to created task to card successful', status: 500, error: err })
