@@ -62,9 +62,12 @@ const editBoard = async function (req: Request, res: Response, next: NextFunctio
   }
 }
 
-// const deleteBoard = async function (req: Request, res: Response, next: NextFunction) {
-//   try {
-//   } catch (err) {}
-// };
+const deleteBoard = async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    logger.info(res)
+  } catch (err) {
+    logger.error(err)
+  }
+}
 
 export { createBoard, getBoard, editBoard, deleteBoard }
