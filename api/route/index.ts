@@ -4,6 +4,7 @@ import {
   addCardToBoard,
   addLabelToCard,
   deleteCardFromBoard,
+  deleteLabelFromCard,
   editCard,
   moveCardFromBoards,
   moveCardWithinBoard
@@ -20,6 +21,8 @@ router.patch('/edit/card', editCard)
 router.get('/get/board', getBoard)
 
 router.post('/card/create/label', addLabelToCard)
+
+router.delete('/card/delete/label', deleteLabelFromCard)
 
 router.post('/board/create/card', addCardToBoard)
 
