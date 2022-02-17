@@ -99,9 +99,17 @@ const moveCardWithinBoard = async (req: Request, res: Response, next: NextFuncti
 
     const { boardId, cardId, newPosIndex } = optionData
 
-    const data = await Boards.findById({ _id: boardId })
+    const board = await Boards.findByIdAndUpdate(
+      boardId,
+      { $push: { cards: cardId, $position: newPosIndex } },
+      { new: true, useFindAndModify: false }
+    )
 
-    console.log('?????????????????', (data?.cards, data?.cards.indexOf(cardId, 0), newPosIndex))
+    console.log('?????????????????', board)
+
+    const data = await Boards.deleteOne({ _id: boardId })
+
+    console.log(data)
 
     // const nr = await Boards.findOneAndUpdate(
     //   { _id: boardId },
