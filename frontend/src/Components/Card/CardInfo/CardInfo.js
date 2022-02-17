@@ -14,7 +14,7 @@ import Modal from "../../Modal/Modal";
 import Editable from "../../Editabled/Editable";
 
 import "./CardInfo.css";
-import { axiosPostInterface } from "../../../Util/axios";
+import { axiosPatchInterface, axiosPostInterface } from "../../../Util/axios";
 
 function CardInfo(props) {
   const colors = [
@@ -105,7 +105,7 @@ function CardInfo(props) {
     props.deleteTask(id, props.card._id, props.boardId)
   };
 
-  const updateTask = (id, value) => {
+  const updateTask = async (id, value) => {
     const tasks = [...values.tasks];
 
     const index = tasks.findIndex((item) => item._id === id);
@@ -117,6 +117,11 @@ function CardInfo(props) {
       ...values,
       tasks,
     });
+    await axiosPatchInterface(`edit/task?taskObjectId=${id}`, {
+      taskEditOption: {
+        ...tasks[index]
+      }
+    })
     props.editTask(id, props.card._id, props.boardId, { completed: value })
   };
 
