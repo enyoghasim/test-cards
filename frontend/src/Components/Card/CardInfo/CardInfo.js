@@ -90,6 +90,7 @@ function CardInfo(props) {
         ...values,
         tasks: [...values.tasks, taskData.data.data],
       });
+      props.addTaskToCard(taskData.data.data, props.card._id, props.boardId);
     }
   };
 

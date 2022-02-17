@@ -59,6 +59,7 @@ function App() {
         return item;
       }
     });
+    // await axiosDeleteInterface(`/delete/task?taskObjectId=${tid}`);
     setBoardsData(tempBoards);
 
   }
@@ -68,6 +69,25 @@ function App() {
     board.cards.map((item) => {
       if (item._id === cid) {
         item.labels.push(label);
+        return item
+      }
+      return item
+    });
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
+  }
+
+  const addTaskToCard = async (task, cid, bid) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        item.tasks.push(task);
         return item
       }
       return item
@@ -100,6 +120,7 @@ function App() {
       }
     });
     setBoardsData(tempBoards);
+      await axiosDeleteInterface(`/card/delete/label?labelId=${lid}`);
   }
 
   const addCardHandler = async (id, title) => {
@@ -248,6 +269,7 @@ function App() {
               deleteLabel={deleteLabelFromCard}
               deleteTask={deleteTaskFromCard}
               addLabelToCard={addLabelToCard}
+              addTaskToCard={addTaskToCard}
             />
           ))}
           <div className="app_boards_last">

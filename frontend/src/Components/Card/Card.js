@@ -69,6 +69,7 @@ function Card(props) {
           deleteLabel={props.deleteLabel}
           deleteTask={props.deleteTask}
           addLabelToCard={props.addLabelToCard}
+          addTaskToCard={props.addTaskToCard}
         />
       )}
       <div
