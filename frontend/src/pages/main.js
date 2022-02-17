@@ -34,11 +34,11 @@ function App() {
     setBoardActionInProgress(false);
   };
 
-  const removeBoard = (id) => {
+  const removeBoard = async (id) => {
     const item = boardsData.filter((item) => item._id !== id);
     setBoardActionInProgress(true);
     setBoardsData(item);
-
+    await axiosDeleteInterface(`/delete/board?boardObjectId=${id}`);
     setBoardActionInProgress(false);
   };
 
