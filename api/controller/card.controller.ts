@@ -67,11 +67,11 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
 
     const labelOptionpayload = { ...labelOption, cardRefId: req?.query?.cardObjectId }
 
-    const label = new LabelModel(labelOptionpayload)
+    const label = LabelModel.create(labelOptionpayload)
 
     let labelData
 
-    await label.save().then(async (result) => {
+    await label.then(async (result) => {
       labelData = result
       const card = await Cards.findByIdAndUpdate(
         req?.query?.cardObjectId,
