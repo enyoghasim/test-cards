@@ -44,6 +44,7 @@ function Board(props) {
             updateCard={props.updateCard}
             deleteLabel={props.deleteLabel}
             deleteTask={props.deleteTask}
+            addLabelToCard={props.addLabelToCard}
           />
         ))}
         <Editable

@@ -63,6 +63,25 @@ function App() {
 
   }
 
+  const addLabelToCard = async (label, cid, bid) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        item.labels.push(label);
+        return item
+      }
+      return item
+    });
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
+  }
+
   const deleteLabelFromCard = async (lid, cid, bid) => {
     const board = boardsData.find((item) => item._id === bid);
     board.cards.map((item) => {
@@ -228,6 +247,7 @@ function App() {
               updateCard={updateCard}
               deleteLabel={deleteLabelFromCard}
               deleteTask={deleteTaskFromCard}
+              addLabelToCard={addLabelToCard}
             />
           ))}
           <div className="app_boards_last">

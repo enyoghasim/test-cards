@@ -55,12 +55,12 @@ function CardInfo(props) {
 
     if (labelData && labelData.status === 200) {
 
-      console.log(labelData);
 
       setValues({
         ...values,
         labels: [...values.labels, labelData.data.data],
       });
+      props.addLabelToCard(labelData.data.data, props.card._id, props.boardId);
     }
   };
 
