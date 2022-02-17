@@ -22,12 +22,6 @@ type IwithinOptionData = {
   };
 };
 
-const arraymove = (arr, fromIndex, toIndex) => {
-  const element = arr[fromIndex]
-  arr.splice(fromIndex, 1)
-  arr.splice(toIndex, 0, element)
-}
-
 const addCardToBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { cardOption } = req.body
@@ -102,11 +96,12 @@ const moveCardFromBoards = async (req: Request, res: Response, next: NextFunctio
 const moveCardWithinBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { optionData } = req.body as IwithinOptionData
+
     const { boardId, cardId, newPosIndex } = optionData
 
     const data = await Boards.findById({ _id: boardId })
 
-    console.log('?????????????????', arraymove(data?.cards, data?.cards.indexOf(cardId, 0), newPosIndex))
+    console.log('?????????????????', (data?.cards, data?.cards.indexOf(cardId, 0), newPosIndex))
 
     // const nr = await Boards.findOneAndUpdate(
     //   { _id: boardId },

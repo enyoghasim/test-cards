@@ -1,8 +1,8 @@
-import { Schema, model, Model } from 'mongoose'
+import { Schema, model, Model, Document } from 'mongoose'
 import { v4 } from 'uuid'
 import { logger } from '../service/logger'
 
-export interface IBoard {
+export interface IBoard extends Document {
   id: string;
   title: string;
   description: string;
@@ -47,9 +47,9 @@ const BoardSchema = new Schema<IBoard>(
 BoardSchema.pre('save', function (next) {
   // do stuff
   const now = new Date()
-  this.updated_at = now
-  if (!this.created_at) {
-    this.created_at = now
+  this.updatedAt = now
+  if (!this.createdAt) {
+    this.createdAt = now
   }
   logger.info('before saving board here')
   next()
