@@ -24,8 +24,7 @@ const LabelSchema = new Schema<ILabel>(
     title: {
       type: String,
       required: true,
-      lowercase: true,
-      trim: true
+      lowercase: true
     },
     color: {
       type: String,
