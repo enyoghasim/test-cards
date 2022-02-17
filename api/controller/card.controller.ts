@@ -11,6 +11,7 @@ type IoptionData = {
     boardFromId: string;
     boardToId: string;
     cardId: string;
+    newPosIndex: number;
   };
 };
 
@@ -83,8 +84,11 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
 
 const moveCardFromBoards = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { optionData } = req.query as IoptionData
-    const { boardFromId, boardToId, cardId } = optionData
+    const { optionData } = req.body as IoptionData
+    const { boardFromId, boardToId, cardId, newPosIndex } = optionData
+
+    // remove card from the from board and update it on the to board
+    await Boards.findByIdAndUpdate(boardFromId, { $pull: { cards: cardId } }, { new: true, useFindAndModify: false })
 
     logger.info('move card controller')
     // remove the card from the first board and taking it to the second board
