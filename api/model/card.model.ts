@@ -28,7 +28,6 @@ const CardSchema = new Schema<ICard>(
     },
     title: {
       type: String,
-      index: { unique: true, sparse: true },
       required: true,
       lowercase: true,
       trim: true

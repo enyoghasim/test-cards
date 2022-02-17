@@ -24,7 +24,6 @@ const TaskSchema = new Schema<ITask>(
     },
     title: {
       type: String,
-      index: { unique: true, sparse: true },
       required: true,
       lowercase: true,
       trim: true
