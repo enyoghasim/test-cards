@@ -1,8 +1,8 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
 import { v4 } from 'uuid'
 import { logger } from '../service/logger'
 
-interface ITask {
+interface ITask extends Document {
   id: string;
   cardRefId: string;
   title: string;
