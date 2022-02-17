@@ -30,7 +30,9 @@ const arraymove = (arr, fromIndex, toIndex) => {
 
 const addCardToBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const card = new Cards(req.body.cardOption)
+    const { cardOption } = req.body
+    const labelOptionpayload = { ...cardOption, boardRefId: req?.query?.boardObjectId }
+    const card = new Cards(labelOptionpayload)
     let cardData
     await card.save().then(async (result) => {
       cardData = result
@@ -121,6 +123,31 @@ const moveCardWithinBoard = async (req: Request, res: Response, next: NextFuncti
   }
 }
 
+const deleteLabelFromCard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    logger.info('delete label controller')
+
+    const labelId: any = req.query.labelId
+
+    // deleted card
+    const deleted = await LabelModel.findOneAndDelete({ _id: labelId })
+
+    if (!deleted) return res.status(400).send('deleted card failed to be removed successful')
+
+    if (deleted) {
+      await Cards.find({ labels: { $in: [labelId] } }).then((labels) => {
+        Promise.all(
+          labels.map((label) => Cards.findOneAndUpdate(label._id, { $pull: { labels: labelId } }, { new: true }))
+        )
+      })
+
+      res.status(200).json({ message: 'deleted label from card successful', status: 200, data: deleted })
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'unable to delete label successfully', status: 500, error: err })
+  }
+}
+
 const deleteCardFromBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     logger.info('delete card controller')
@@ -150,4 +177,12 @@ const deleteCardFromBoard = async (req: Request, res: Response, next: NextFuncti
   }
 }
 
-export { addCardToBoard, editCard, moveCardFromBoards, moveCardWithinBoard, addLabelToCard, deleteCardFromBoard }
+export {
+  addCardToBoard,
+  editCard,
+  deleteLabelFromCard,
+  moveCardFromBoards,
+  moveCardWithinBoard,
+  addLabelToCard,
+  deleteCardFromBoard
+}

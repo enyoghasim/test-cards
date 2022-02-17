@@ -7,6 +7,7 @@ import TaskModel from './task.model'
 
 interface ICard {
   id: string;
+  boardRefId: string;
   title: string;
   description: string;
   labels: object[];
@@ -18,6 +19,10 @@ interface ICard {
 const CardSchema = new Schema<ICard>(
   {
     id: {
+      type: String,
+      default: v4()
+    },
+    boardRefId: {
       type: String,
       default: v4()
     },
