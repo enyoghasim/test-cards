@@ -1,5 +1,5 @@
 import app, { Router } from 'express'
-import { createBoard, editBoard, getBoard } from '../controller/board.controller'
+import { createBoard, deleteBoard, editBoard, getBoard } from '../controller/board.controller'
 import {
   addCardToBoard,
   addLabelToCard,
@@ -15,6 +15,8 @@ import { addTaskToCard, editTask } from '../controller/task.controller'
 const router: Router = app.Router()
 
 router.post('/create/board', createBoard)
+
+router.delete('/delete/board', deleteBoard)
 
 router.patch('/edit/card', editCard)
 
