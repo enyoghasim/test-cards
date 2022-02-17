@@ -9,7 +9,7 @@ import {
   moveCardFromBoards,
   moveCardWithinBoard
 } from '../controller/card.controller'
-import { addTaskToCard, editTask } from '../controller/task.controller'
+import { addTaskToCard, deleteTaskFromCard, editTask } from '../controller/task.controller'
 
 // Initiate router
 const router: Router = app.Router()
@@ -31,6 +31,8 @@ router.post('/board/create/card', addCardToBoard)
 router.post('/card/create/task', addTaskToCard)
 
 router.patch('/edit/task', editTask)
+
+router.delete('/card/delete/task', deleteTaskFromCard)
 
 router.put('/move/card/board', moveCardFromBoards)
 

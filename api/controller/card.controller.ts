@@ -67,11 +67,11 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
 
     const labelOptionpayload = { ...labelOption, cardRefId: req?.query?.cardObjectId }
 
-    const label = LabelModel.create(labelOptionpayload)
+    const label = new LabelModel(labelOptionpayload)
 
     let labelData
 
-    await label.then(async (result) => {
+    await label.save().then(async (result) => {
       labelData = result
       const card = await Cards.findByIdAndUpdate(
         req?.query?.cardObjectId,
@@ -104,17 +104,22 @@ const moveCardWithinBoard = async (req: Request, res: Response, next: NextFuncti
     const { optionData } = req.body as IwithinOptionData
     const { boardId, cardId, newPosIndex } = optionData
 
-    const nr = await Boards.findByIdAndUpdate({ _id: boardId })
+    const data = await Boards.findById({ _id: boardId })
 
-    console.log('?????????????????', nr?.cards)
+    console.log('?????????????????', arraymove(data?.cards, data?.cards.indexOf(cardId, 0), newPosIndex))
 
-    // await Boards.findById({ _id: boardId }, async (err, docs) => {
+    // const nr = await Boards.findOneAndUpdate(
+    //   { _id: boardId },
+    //   {
+    //     $set: { cards: req.body.wordList.words },
+    //   },
+    //   {
+    //     upsert: true,
+    //     runValidators: true,
+    //   }
+    // );
 
-    //   const newCards = arraymove(docs?.cards, docs?.cards.indexOf(cardId, 0), newPosIndex);
-
-    //   console.log("?????????",nr)
-
-    // });
+    // console.log('?????????????????', nr);
 
     logger.info('move card controller')
   } catch (err) {
@@ -132,7 +137,7 @@ const deleteLabelFromCard = async (req: Request, res: Response, next: NextFuncti
     // deleted card
     const deleted = await LabelModel.findOneAndDelete({ _id: labelId })
 
-    if (!deleted) return res.status(400).send('deleted card failed to be removed successful')
+    if (!deleted) return res.status(400).send('deleted label failed to be removed successful')
 
     if (deleted) {
       await Cards.find({ labels: { $in: [labelId] } }).then((labels) => {
