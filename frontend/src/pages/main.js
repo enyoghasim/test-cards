@@ -59,7 +59,7 @@ function App() {
         return item;
       }
     });
-    // await axiosDeleteInterface(`/delete/task?taskObjectId=${tid}`);
+    await axiosDeleteInterface(`/card/delete/task?tasklId=${tid}`);
     setBoardsData(tempBoards);
 
   }
@@ -120,7 +120,36 @@ function App() {
       }
     });
     setBoardsData(tempBoards);
-      await axiosDeleteInterface(`/card/delete/label?labelId=${lid}`);
+    await axiosDeleteInterface(`/card/delete/label?labelId=${lid}`);
+  }
+
+
+
+  const editTaskFromCard = async (tid, cid, bid, task) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        item.tasks.map((item) => {
+          if (item._id === tid) {
+            item = { ...item, ...task };
+            return item
+          }
+          return item
+        });
+        return item
+      }
+      return item
+    }
+    );
+
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
   }
 
   const addCardHandler = async (id, title) => {
@@ -270,6 +299,8 @@ function App() {
               deleteTask={deleteTaskFromCard}
               addLabelToCard={addLabelToCard}
               addTaskToCard={addTaskToCard}
+              editTask={editTaskFromCard}
+
             />
           ))}
           <div className="app_boards_last">

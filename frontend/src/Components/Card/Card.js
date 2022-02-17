@@ -70,6 +70,7 @@ function Card(props) {
           deleteTask={props.deleteTask}
           addLabelToCard={props.addLabelToCard}
           addTaskToCard={props.addTaskToCard}
+          editTask={props.editTask}
         />
       )}
       <div

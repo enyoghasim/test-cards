@@ -108,7 +108,7 @@ function CardInfo(props) {
   const updateTask = (id, value) => {
     const tasks = [...values.tasks];
 
-    const index = tasks.findIndex((item) => item.id === id);
+    const index = tasks.findIndex((item) => item._id === id);
     if (index < 0) return;
 
     tasks[index].completed = value;
@@ -117,6 +117,7 @@ function CardInfo(props) {
       ...values,
       tasks,
     });
+    props.editTask(id, props.card._id, props.boardId, { completed: value })
   };
 
   const calculatePercent = () => {
@@ -243,7 +244,7 @@ function CardInfo(props) {
                   type="checkbox"
                   defaultChecked={item.completed}
                   onChange={(event) =>
-                    updateTask(item.id, event.target.checked)
+                    updateTask(item._id, event.target.checked)
                   }
                 />
                 <p className={item.completed ? "completed" : ""}>{item.title}</p>
