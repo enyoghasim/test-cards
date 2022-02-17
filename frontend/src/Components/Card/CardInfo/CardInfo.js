@@ -34,10 +34,12 @@ function CardInfo(props) {
 
   const updateTitle = (value) => {
     setValues({ ...values, title: value });
+    props.updateCardData(props.card._id, props.boardId, { title: value });
   };
 
   const updateDesc = (value) => {
-    setValues({ ...values, desc: value });
+    setValues({ ...values, description: value });
+    props.updateCardData(props.card._id, props.boardId, { description: value });
   };
 
   const addLabel = async (label) => {
@@ -125,6 +127,8 @@ function CardInfo(props) {
     props.editTask(id, props.card._id, props.boardId, { completed: value })
   };
 
+
+
   const calculatePercent = () => {
     if (!values.tasks?.length) return 0;
     const completed = values.tasks?.filter((item) => item.completed)?.length;
@@ -138,18 +142,8 @@ function CardInfo(props) {
       ...values,
       date,
     });
+    props.updateCardData(props.card._id, props.boardId, { date });
   };
-  const params = useParams()
-
-  useEffect(() => {
-    console.log(props);
-    //  return navigate.listen((location) => { 
-    //     console.log(`You changed the page to: ${location.pathname}`) 
-    //  }) 
-  }, [props])
-  useEffect(() => {
-    if (props.updateCard) props.updateCard(props.boardId, values.id, values);
-  }, [values]);
 
   return (
     <Modal onClose={props.onClose}>
@@ -173,8 +167,8 @@ function CardInfo(props) {
             <p>Description</p>
           </div>
           <Editable
-            defaultValue={values.desc}
-            text={values.desc || "Add a Description"}
+            defaultValue={values.description}
+            text={values.description || "Add a Description"}
             placeholder="Enter description"
             onSubmit={updateDesc}
           />
@@ -199,9 +193,9 @@ function CardInfo(props) {
             <p>Labels</p>
           </div>
           <div className="cardinfo_box_labels">
-            {values.labels?.map((item, index) => (
+            {values.labels?.map((item) => (
               <label
-                key={index}
+                key={item._id}
                 style={{ backgroundColor: item.color, color: "#fff" }}
               >
                 {item.title}

@@ -5,7 +5,7 @@ import Board from "../Components/Board/Board";
 
 import "./main.css";
 import Editable from "../Components/Editabled/Editable";
-import { axiosGetInterface, axiosPostInterface, axiosDeleteInterface } from "../Util/axios";
+import { axiosGetInterface, axiosPostInterface, axiosDeleteInterface, axiosPatchInterface } from "../Util/axios";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
@@ -123,6 +123,26 @@ function App() {
     await axiosDeleteInterface(`/card/delete/label?labelId=${lid}`);
   }
 
+
+  const updateCardData = async (cid, bid, card) => {
+    const board = boardsData.find((item) => item._id === bid);
+    let newCard = board.cards.map(element => {
+      if (element._id === cid) {
+        element = { ...element, ...card }
+      } return element
+    });
+
+    board.cards = newCard;
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        item.cards = newCard
+      }
+      return item
+    });
+    await axiosPatchInterface(`/edit/card?cardObjectId=${cid}`, { boardEditOption: { ...card } });
+    setBoardsData(tempBoards);
+
+  }
 
 
   const editTaskFromCard = async (tid, cid, bid, task) => {
@@ -300,6 +320,7 @@ function App() {
               addLabelToCard={addLabelToCard}
               addTaskToCard={addTaskToCard}
               editTask={editTaskFromCard}
+              updateCardData={updateCardData}
 
             />
           ))}
