@@ -5,7 +5,7 @@ import Board from "../Components/Board/Board";
 
 import "./main.css";
 import Editable from "../Components/Editabled/Editable";
-import { axiosGetInterface, axiosPostInterface, axiosDeleteInterface } from "../Util/axios";
+import { axiosGetInterface, axiosPostInterface, axiosDeleteInterface, axiosPatchInterface } from "../Util/axios";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
@@ -34,13 +34,143 @@ function App() {
     setBoardActionInProgress(false);
   };
 
-  const removeBoard = (id) => {
+  const removeBoard = async (id) => {
     const item = boardsData.filter((item) => item._id !== id);
     setBoardActionInProgress(true);
     setBoardsData(item);
-
+    await axiosDeleteInterface(`/delete/board?boardObjectId=${id}`);
     setBoardActionInProgress(false);
   };
+
+  const deleteTaskFromCard = async (tid, cid, bid) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        const iTasks = item.tasks.filter(task => task._id !== tid)
+        item.tasks = iTasks;
+        return item
+      }
+      return item
+    });
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    await axiosDeleteInterface(`/card/delete/task?tasklId=${tid}`);
+    setBoardsData(tempBoards);
+
+  }
+
+  const addLabelToCard = async (label, cid, bid) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        item.labels.push(label);
+        return item
+      }
+      return item
+    });
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
+  }
+
+  const addTaskToCard = async (task, cid, bid) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        item.tasks.push(task);
+        return item
+      }
+      return item
+    });
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
+  }
+
+  const deleteLabelFromCard = async (lid, cid, bid) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        const iLabels = item.labels.filter(task => task._id !== lid)
+        item.labels = iLabels;
+        return item
+      }
+      return item
+    });
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
+    await axiosDeleteInterface(`/card/delete/label?labelId=${lid}`);
+  }
+
+
+  const updateCardData = async (cid, bid, card) => {
+    const board = boardsData.find((item) => item._id === bid);
+    let newCard = board.cards.map(element => {
+      if (element._id === cid) {
+        element = { ...element, ...card }
+      } return element
+    });
+
+    board.cards = newCard;
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        item.cards = newCard
+      }
+      return item
+    });
+    await axiosPatchInterface(`/edit/card?cardObjectId=${cid}`, { boardEditOption: { ...card } });
+    setBoardsData(tempBoards);
+
+  }
+
+
+  const editTaskFromCard = async (tid, cid, bid, task) => {
+    const board = boardsData.find((item) => item._id === bid);
+    board.cards.map((item) => {
+      if (item._id === cid) {
+        item.tasks.map((item) => {
+          if (item._id === tid) {
+            item = { ...item, ...task };
+            return item
+          }
+          return item
+        });
+        return item
+      }
+      return item
+    }
+    );
+
+    const tempBoards = boardsData.map((item) => {
+      if (item._id === bid) {
+        return board
+      } else {
+        return item;
+      }
+    });
+    setBoardsData(tempBoards);
+  }
 
   const addCardHandler = async (id, title) => {
     setBoardActionInProgress(true);
@@ -185,6 +315,13 @@ function App() {
               dragEnded={dragEnded}
               dragEntered={dragEntered}
               updateCard={updateCard}
+              deleteLabel={deleteLabelFromCard}
+              deleteTask={deleteTaskFromCard}
+              addLabelToCard={addLabelToCard}
+              addTaskToCard={addTaskToCard}
+              editTask={editTaskFromCard}
+              updateCardData={updateCardData}
+
             />
           ))}
           <div className="app_boards_last">

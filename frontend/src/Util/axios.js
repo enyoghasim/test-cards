@@ -47,9 +47,19 @@ const axiosDeleteInterface = async (path = '/', optionsdata = {}, config = {}) =
 }
 
 
+const axiosPatchInterface = async (path = '/', optionsdata = {}, config = {}) => {
+    try {
+        return await instance.patch(path, optionsdata, config)
+    } catch (error) {
+        return error;
+    }
+}
+
+
 export {
     axiosGetInterface,
     axiosPostInterface,
     axiosPutInterface,
-    axiosDeleteInterface
+    axiosDeleteInterface,
+    axiosPatchInterface
 }

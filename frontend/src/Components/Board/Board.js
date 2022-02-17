@@ -42,6 +42,12 @@ function Board(props) {
             dragEntered={props.dragEntered}
             dragEnded={props.dragEnded}
             updateCard={props.updateCard}
+            updateCardData={props.updateCardData}
+            deleteLabel={props.deleteLabel}
+            deleteTask={props.deleteTask}
+            addLabelToCard={props.addLabelToCard}
+            addTaskToCard={props.addTaskToCard}
+            editTask={props.editTask}
           />
         ))}
         <Editable

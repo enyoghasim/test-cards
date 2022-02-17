@@ -14,7 +14,7 @@ import Modal from "../../Modal/Modal";
 import Editable from "../../Editabled/Editable";
 
 import "./CardInfo.css";
-import { axiosPostInterface } from "../../../Util/axios";
+import { axiosPatchInterface, axiosPostInterface } from "../../../Util/axios";
 
 function CardInfo(props) {
   const colors = [
@@ -34,10 +34,12 @@ function CardInfo(props) {
 
   const updateTitle = (value) => {
     setValues({ ...values, title: value });
+    props.updateCardData(props.card._id, props.boardId, { title: value });
   };
 
   const updateDesc = (value) => {
-    setValues({ ...values, desc: value });
+    setValues({ ...values, description: value });
+    props.updateCardData(props.card._id, props.boardId, { description: value });
   };
 
   const addLabel = async (label) => {
@@ -55,31 +57,32 @@ function CardInfo(props) {
 
     if (labelData && labelData.status === 200) {
 
-      console.log(labelData);
 
       setValues({
         ...values,
         labels: [...values.labels, labelData.data.data],
       });
+      props.addLabelToCard(labelData.data.data, props.card._id, props.boardId);
     }
   };
 
   const removeLabel = (label) => {
-    const tempLabels = values.labels.filter((item) => item.text !== label.text);
+    const tempLabels = values.labels.filter((item) => item._id !== label._id);
 
     setValues({
       ...values,
       labels: tempLabels,
     });
+    props.deleteLabel(label._id, props.card._id, props.boardId)
   };
 
-  const addTask =async (value) => {
-  
+  const addTask = async (value) => {
+
     const taskData = await axiosPostInterface(`card/create/task?cardObjectId=${props.card._id}`, {
-      taskOption:{
-        title:value,
-        completed:false
-    }
+      taskOption: {
+        title: value,
+        completed: false
+      }
     })
 
     if (taskData && taskData.status === 200) {
@@ -87,25 +90,27 @@ function CardInfo(props) {
 
       setValues({
         ...values,
-        tasks: [...values.tasks, task],
+        tasks: [...values.tasks, taskData.data.data],
       });
+      props.addTaskToCard(taskData.data.data, props.card._id, props.boardId);
     }
   };
 
   const removeTask = (id) => {
     const tasks = [...values.tasks];
 
-    const tempTasks = tasks.filter((item) => item.id !== id);
+    const tempTasks = tasks.filter((item) => item._id !== id);
     setValues({
       ...values,
       tasks: tempTasks,
     });
+    props.deleteTask(id, props.card._id, props.boardId)
   };
 
-  const updateTask = (id, value) => {
+  const updateTask = async (id, value) => {
     const tasks = [...values.tasks];
 
-    const index = tasks.findIndex((item) => item.id === id);
+    const index = tasks.findIndex((item) => item._id === id);
     if (index < 0) return;
 
     tasks[index].completed = value;
@@ -114,7 +119,15 @@ function CardInfo(props) {
       ...values,
       tasks,
     });
+    await axiosPatchInterface(`edit/task?taskObjectId=${id}`, {
+      taskEditOption: {
+        ...tasks[index]
+      }
+    })
+    props.editTask(id, props.card._id, props.boardId, { completed: value })
   };
+
+
 
   const calculatePercent = () => {
     if (!values.tasks?.length) return 0;
@@ -129,17 +142,8 @@ function CardInfo(props) {
       ...values,
       date,
     });
+    props.updateCardData(props.card._id, props.boardId, { date });
   };
-  const params = useParams()
-
-  useEffect(() => {
-    //  return navigate.listen((location) => { 
-    //     console.log(`You changed the page to: ${location.pathname}`) 
-    //  }) 
-  }, [params])
-  useEffect(() => {
-    if (props.updateCard) props.updateCard(props.boardId, values.id, values);
-  }, [values]);
 
   return (
     <Modal onClose={props.onClose}>
@@ -163,8 +167,8 @@ function CardInfo(props) {
             <p>Description</p>
           </div>
           <Editable
-            defaultValue={values.desc}
-            text={values.desc || "Add a Description"}
+            defaultValue={values.description}
+            text={values.description || "Add a Description"}
             placeholder="Enter description"
             onSubmit={updateDesc}
           />
@@ -189,9 +193,9 @@ function CardInfo(props) {
             <p>Labels</p>
           </div>
           <div className="cardinfo_box_labels">
-            {values.labels?.map((item, index) => (
+            {values.labels?.map((item) => (
               <label
-                key={index}
+                key={item._id}
                 style={{ backgroundColor: item.color, color: "#fff" }}
               >
                 {item.title}
@@ -239,11 +243,11 @@ function CardInfo(props) {
                   type="checkbox"
                   defaultChecked={item.completed}
                   onChange={(event) =>
-                    updateTask(item.id, event.target.checked)
+                    updateTask(item._id, event.target.checked)
                   }
                 />
                 <p className={item.completed ? "completed" : ""}>{item.title}</p>
-                <Trash onClick={() => removeTask(item.id)} />
+                <Trash onClick={() => removeTask(item._id)} />
               </div>
             ))}
           </div>

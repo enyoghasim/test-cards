@@ -14,6 +14,7 @@ interface ICard extends Document {
   tasks: object[];
   updatedAt: any;
   createdAt: any;
+  date: any;
 }
 
 const CardSchema = new Schema<ICard>(
@@ -31,6 +32,9 @@ const CardSchema = new Schema<ICard>(
       required: true,
       lowercase: true,
       trim: true
+    },
+    date: {
+      type: String
     },
     description: {
       type: String
