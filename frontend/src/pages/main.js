@@ -305,7 +305,7 @@ function App() {
       </div>
       <div className="app_boards_container">
         <div className="app_boards">
-          {boardsData && boardsData.length && boardsData.map((item) => (
+          {boardsData && boardsData.map((item) => (
             <Board
               key={item._id}
               board={item}
