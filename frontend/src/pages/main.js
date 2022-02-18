@@ -252,7 +252,15 @@ function App() {
           newPosIndex: t_cardIndex
         }
       })
-
+    }else{
+      await axiosPutInterface("/card/move/board", {
+        optionData: {
+          boardFromId: bid,
+          boardToId: targetCard.bid,
+          cardId: cid,
+          newPosIndex: t_cardIndex
+        }
+      })
     }
 
     setTargetCard({
