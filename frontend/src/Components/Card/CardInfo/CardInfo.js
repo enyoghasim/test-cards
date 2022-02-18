@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom'
+import React, { useState } from "react";
 import {
   Calendar,
   CheckSquare,
+  Copy,
   List,
   Tag,
   Trash,
@@ -15,6 +15,7 @@ import Editable from "../../Editabled/Editable";
 
 import "./CardInfo.css";
 import { axiosPatchInterface, axiosPostInterface } from "../../../Util/axios";
+import { useNavigate } from "react-router-dom";
 
 function CardInfo(props) {
   const colors = [
@@ -31,7 +32,7 @@ function CardInfo(props) {
   const [values, setValues] = useState({
     ...props.card,
   });
-
+  const navigate = useNavigate()
   const updateTitle = (value) => {
     setValues({ ...values, title: value });
     props.updateCardData(props.card._id, props.boardId, { title: value });
@@ -42,6 +43,13 @@ function CardInfo(props) {
     props.updateCardData(props.card._id, props.boardId, { description: value });
   };
 
+
+  const copyText = async () => {
+    
+    await navigator.clipboard.writeText(window.location)
+    alert("Copied to clipboard")
+
+  }
   const addLabel = async (label) => {
     const index = values.labels.findIndex((item) => item.text === label.text);
     if (index > -1) return;
@@ -148,6 +156,13 @@ function CardInfo(props) {
   return (
     <Modal onClose={props.onClose}>
       <div className="cardinfo">
+        <div className="card_top">
+          <span className="share-icon" title="Share Card">
+            <Copy onClick={copyText} />
+
+          </span>
+          <X onClick={() => navigate('/')} />
+        </div>
         <div className="cardinfo_box">
           <div className="cardinfo_box_title">
             <Type />
@@ -193,9 +208,9 @@ function CardInfo(props) {
             <p>Labels</p>
           </div>
           <div className="cardinfo_box_labels">
-            {values.labels?.map((item,index) => (
+            {values.labels?.map((item, index) => (
               <label
-               key={index}
+                key={index}
                 style={{ backgroundColor: item.color, color: "#fff" }}
               >
                 {item.title}
@@ -237,7 +252,7 @@ function CardInfo(props) {
             />
           </div>
           <div className="cardinfo_box_task_list">
-            {values.tasks?.map((item,index) => (
+            {values.tasks?.map((item, index) => (
               <div key={index} className="cardinfo_box_task_checkbox">
                 <input
                   type="checkbox"

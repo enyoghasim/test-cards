@@ -1,13 +1,27 @@
+.card_top{
+  display: flex;
+  flex-direction: revert;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.card_top svg{
+    cursor: pointer;
+}
+
 .cardinfo {
   padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 30px;
-  min-width: 550px;
   width: fit-content;
   max-width: 550px;
+  min-width: 550px;
   height: fit-content;
 }
+
+
 
 .cardinfo_box {
   width: 100%;
@@ -122,3 +136,10 @@
   font-size: 1rem;
   padding: 10px;
 }
+
+
+/* @media (max-width: 768px) {
+  .cardinfo {
+  min-width: 0;
+  }
+} */
