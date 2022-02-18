@@ -23,6 +23,18 @@ type IwithinOptionData = {
   };
 };
 
+const appendIdArray = (arr, index: number, cardId: string) => {
+  if (index > arr.length - 1 || index < 0) {
+    return arr.push(cardId)
+  }
+  return arr.splice(index, 0, cardId)
+}
+
+// const swapArray = (arr, index: number, cardId: string) => {
+//   const indexOfId = arr.findIndex((i) => i === cardId);
+//   arr.splice()
+// };
+
 const addCardToBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { cardOption } = req.body
@@ -117,6 +129,7 @@ const moveCardWithinBoard = async (req: Request, res: Response, next: NextFuncti
     const { boardId, cardId, newPosIndex } = optionData
 
     logger.info('move card controller')
+    // let removedCardIdFromBoard = '';
 
     const removedCardIdFromBoard = await Boards.findByIdAndUpdate(
       boardId,
@@ -130,6 +143,23 @@ const moveCardWithinBoard = async (req: Request, res: Response, next: NextFuncti
         { $push: { cards: { $each: [cardId], $position: newPosIndex } } },
         { new: true, useFindAndModify: false }
       )
+
+      // const currentBoard = await Boards.findOne({ _id: boardId });
+      // console.log(currentBoard, 'uuuuu');
+
+      // if (!currentBoard?._id) res.status(404).json({ message: 'board not found', status: 404 });
+      // const updatedCards = appendIdArray(currentBoard?.cards, newPosIndex, cardId);
+
+      // console.log(updatedCards);
+
+      // updatedCardPosition = await Boards.updateOne(
+      //   { _id: boardId },
+      //   {
+      //     $set: {
+      //       cards: updatedCards,
+      //     },
+      //   }
+      // );
     }
     res.status(200).json({ message: 'moved card in board successful', status: 200, data: updatedCardPosition })
   } catch (err) {
