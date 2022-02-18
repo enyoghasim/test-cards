@@ -84,8 +84,8 @@ function Card(props) {
       >
         <div className="card_top">
           <div className="card_top_labels">
-            {labels?.map((item) => (
-              <label key={item._id} style={{ backgroundColor: item.color }}>
+            {labels?.map((item,index) => (
+              <label key={index} style={{ backgroundColor: item.color }}>
                 {item.text}
               </label>
             ))}

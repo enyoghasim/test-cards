@@ -193,9 +193,9 @@ function CardInfo(props) {
             <p>Labels</p>
           </div>
           <div className="cardinfo_box_labels">
-            {values.labels?.map((item) => (
+            {values.labels?.map((item,index) => (
               <label
-                key={item._id}
+               key={index}
                 style={{ backgroundColor: item.color, color: "#fff" }}
               >
                 {item.title}
@@ -237,8 +237,8 @@ function CardInfo(props) {
             />
           </div>
           <div className="cardinfo_box_task_list">
-            {values.tasks?.map((item) => (
-              <div key={item._id} className="cardinfo_box_task_checkbox">
+            {values.tasks?.map((item,index) => (
+              <div key={index} className="cardinfo_box_task_checkbox">
                 <input
                   type="checkbox"
                   defaultChecked={item.completed}

@@ -11,7 +11,8 @@ function Board(props) {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <div className="board">
+    <div className="board" onDragEnd={() => props.dragEnded(props.boardId, null, true)}>
+      {/* onDragEnter={() => props.dragEntered(props.boardId, )} */}
       <div className="board_header">
         <p className="board_header_title">
           {props.board?.title}
@@ -33,9 +34,9 @@ function Board(props) {
         </div>
       </div>
       <div className="board_cards custom-scroll">
-        {props.board?.cards?.map((item) => (
+        {props.board?.cards?.map((item, index) => (
           <Card
-            key={item._id}
+            key={index}
             card={item}
             boardId={props.board._id}
             removeCard={props.removeCard}

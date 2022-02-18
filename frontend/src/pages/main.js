@@ -214,7 +214,8 @@ function App() {
     setBoardActionInProgress(false);
   };
 
-  const dragEnded = (bid, cid) => {
+  const dragEnded = (bid, cid, emptyCard = false) => {
+    console.log(bid, cid, "drag end");
     let s_boardIndex, s_cardIndex, t_boardIndex, t_cardIndex;
     s_boardIndex = boardsData.findIndex((item) => item._id === bid);
     if (s_boardIndex < 0) return;
@@ -227,11 +228,24 @@ function App() {
     t_boardIndex = boardsData.findIndex((item) => item._id === targetCard.bid);
     if (t_boardIndex < 0) return;
 
-    t_cardIndex = boardsData[t_boardIndex]?.cards?.findIndex(
-      (item) => item._id === targetCard.cid
-    );
-    if (t_cardIndex < 0) return;
-
+    if (!emptyCard) {
+      t_cardIndex = boardsData[t_boardIndex]?.cards?.findIndex(
+        (item) => item._id === targetCard.cid
+      );
+      if (t_cardIndex < 0) return;
+    }else {
+      t_cardIndex = 0;
+    }
+  
+    console.log(
+      bid,
+      "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><>",
+      targetCard.bid,
+      "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><>",
+      cid,
+      "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><>",
+      t_cardIndex
+    )
     const tempBoards = [...boardsData];
     const sourceCard = tempBoards[s_boardIndex].cards[s_cardIndex];
     tempBoards[s_boardIndex].cards.splice(s_cardIndex, 1);
@@ -245,6 +259,7 @@ function App() {
   };
 
   const dragEntered = (bid, cid) => {
+    console.log(bid, cid);
     if (targetCard.cid === cid) return;
     setTargetCard({
       bid,
@@ -305,9 +320,9 @@ function App() {
       </div>
       <div className="app_boards_container">
         <div className="app_boards">
-          {boardsData && boardsData.map((item) => (
+          {boardsData && boardsData.map((item, index) => (
             <Board
-              key={item._id}
+              key={index}
               board={item}
               addCard={addCardHandler}
               removeBoard={() => removeBoard(item._id)}
