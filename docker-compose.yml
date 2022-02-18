@@ -23,7 +23,7 @@ services:
       - ./frontend/.env
       
     ports:
-      - "80:3200"
+      - "81:3200"
     
 
 

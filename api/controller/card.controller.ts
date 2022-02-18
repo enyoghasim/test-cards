@@ -11,6 +11,7 @@ type IoptionData = {
     boardFromId: string;
     boardToId: string;
     cardId: string;
+    newPosIndex: number;
   };
 };
 
@@ -83,13 +84,28 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
 
 const moveCardFromBoards = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { optionData } = req.query as IoptionData
-    const { boardFromId, boardToId, cardId } = optionData
+    logger.info('move card btw boards controller')
+    const { optionData } = req.body as IoptionData
+    const { boardFromId, boardToId, cardId, newPosIndex } = optionData
+    let updatedboard
 
-    logger.info('move card controller')
-    // remove the card from the first board and taking it to the second board
+    const oldBoardDelete = await Boards.findByIdAndUpdate(
+      boardFromId,
+      { $pull: { cards: cardId } },
+      { new: true, useFindAndModify: false }
+    )
+
+    if (oldBoardDelete) {
+      updatedboard = await Boards.findByIdAndUpdate(
+        boardToId,
+        { $push: { cards: { $each: [cardId], $position: newPosIndex } } },
+        { new: true, useFindAndModify: false }
+      )
+    }
+
+    res.status(200).json({ message: 'moved card from boards successful', status: 200, data: updatedboard })
   } catch (err) {
-    res.status(500).json(err)
+    res.status(500).json({ message: 'moved card from boards failed', status: 500, error: err })
   }
 }
 

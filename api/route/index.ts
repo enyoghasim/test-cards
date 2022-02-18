@@ -34,7 +34,7 @@ router.patch('/edit/task', editTask)
 
 router.delete('/card/delete/task', deleteTaskFromCard)
 
-router.put('/move/card/board', moveCardFromBoards)
+router.put('/card/move/board', moveCardFromBoards)
 
 router.patch('/edit/board', editBoard)
 
