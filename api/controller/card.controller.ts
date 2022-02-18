@@ -84,16 +84,28 @@ const addLabelToCard = async (req: Request, res: Response, next: NextFunction) =
 
 const moveCardFromBoards = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    logger.info('move card btw boards controller')
     const { optionData } = req.body as IoptionData
     const { boardFromId, boardToId, cardId, newPosIndex } = optionData
+    let updatedboard
 
-    // remove card from the from board and update it on the to board
-    await Boards.findByIdAndUpdate(boardFromId, { $pull: { cards: cardId } }, { new: true, useFindAndModify: false })
+    const oldBoardDelete = await Boards.findByIdAndUpdate(
+      boardFromId,
+      { $pull: { cards: cardId } },
+      { new: true, useFindAndModify: false }
+    )
 
-    logger.info('move card controller')
-    // remove the card from the first board and taking it to the second board
+    if (oldBoardDelete) {
+      updatedboard = await Boards.findByIdAndUpdate(
+        boardToId,
+        { $push: { cards: { $each: [cardId], $position: newPosIndex } } },
+        { new: true, useFindAndModify: false }
+      )
+    }
+
+    res.status(200).json({ message: 'moved card from boards successful', status: 200, data: updatedboard })
   } catch (err) {
-    res.status(500).json(err)
+    res.status(500).json({ message: 'moved card from boards failed', status: 500, error: err })
   }
 }
 
