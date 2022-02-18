@@ -269,8 +269,8 @@ function App() {
 
   const fetchBoards = async () => {
     setIsLoading(true);
-    const boardsData = await axiosGetInterface('/get/board');
-    setBoardsData(boardsData ? boardsData.data : []);
+    const fetchedBoardsData = await axiosGetInterface('/get/board');
+    setBoardsData(fetchedBoardsData && fetchedBoardsData.data ? fetchedBoardsData.data : []);
     setIsLoading(false);
 
   }

@@ -96,38 +96,29 @@ const moveCardFromBoards = async (req: Request, res: Response, next: NextFunctio
 const moveCardWithinBoard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { optionData } = req.body as IwithinOptionData
+    let updatedCardPosition
 
     const { boardId, cardId, newPosIndex } = optionData
 
-    const board = await Boards.findByIdAndUpdate(
+    logger.info('move card controller')
+
+    const removedCardIdFromBoard = await Boards.findByIdAndUpdate(
       boardId,
-      { $push: { cards: cardId, $position: newPosIndex } },
+      { $pull: { cards: cardId } },
       { new: true, useFindAndModify: false }
     )
 
-    console.log('?????????????????', board)
-
-    const data = await Boards.deleteOne({ _id: boardId })
-
-    console.log(data)
-
-    // const nr = await Boards.findOneAndUpdate(
-    //   { _id: boardId },
-    //   {
-    //     $set: { cards: req.body.wordList.words },
-    //   },
-    //   {
-    //     upsert: true,
-    //     runValidators: true,
-    //   }
-    // );
-
-    // console.log('?????????????????', nr);
-
-    logger.info('move card controller')
+    if (removedCardIdFromBoard) {
+      updatedCardPosition = await Boards.findByIdAndUpdate(
+        boardId,
+        { $push: { cards: { $each: [cardId], $position: newPosIndex } } },
+        { new: true, useFindAndModify: false }
+      )
+    }
+    res.status(200).json({ message: 'moved card in board successful', status: 200, data: updatedCardPosition })
   } catch (err) {
     logger.error(err)
-    res.status(500).json(err)
+    res.status(500).json({ message: 'moved card in board failed', status: 500, error: err })
   }
 }
 
