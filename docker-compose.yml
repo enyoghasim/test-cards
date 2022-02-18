@@ -5,6 +5,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: kaban
     ports:
       - 27017:27017
     volumes:
@@ -19,6 +20,7 @@ services:
 
     env_file:
       - .env
+      - ./frontend/.env
       
     ports:
       - "80:3200"
