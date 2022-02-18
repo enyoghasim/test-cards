@@ -10,8 +10,15 @@ import "./Board.css";
 function Board(props) {
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const handleDrop = (e) => {
+    // console.log(e);
+    if (props.board?.cards?.length)
+      return
+      console.log("drag ended on the last one of the thing");
+  }
+
   return (
-    <div className="board" onDragEnd={() => props.dragEnded(props.boardId, null, true)}>
+    <div className="board" >
       {/* onDragEnter={() => props.dragEntered(props.boardId, )} */}
       <div className="board_header">
         <p className="board_header_title">
@@ -33,7 +40,7 @@ function Board(props) {
           )}
         </div>
       </div>
-      <div className="board_cards custom-scroll">
+      <div className="board_cards custom-scroll" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
         {props.board?.cards?.map((item, index) => (
           <Card
             key={index}
