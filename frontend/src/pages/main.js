@@ -5,7 +5,7 @@ import Board from "../Components/Board/Board";
 
 import "./main.css";
 import Editable from "../Components/Editabled/Editable";
-import { axiosGetInterface, axiosPostInterface, axiosDeleteInterface, axiosPatchInterface } from "../Util/axios";
+import { axiosGetInterface, axiosPostInterface, axiosDeleteInterface, axiosPatchInterface, axiosPutInterface } from "../Util/axios";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
@@ -18,10 +18,6 @@ function App() {
     cid: "",
   });
 
-  const [draggedCard, setDraggedCard] = useState({
-    bid: "",
-    cid: "",
-  });
 
   const addboardHandler = async (name) => {
     const tempBoards = [...boardsData];
@@ -219,12 +215,9 @@ function App() {
     setBoardActionInProgress(false);
   };
 
-  const handleDrop = (bid) => {
-    console.log('this is the main board id', bid);
-  }
 
-  const dragEnded = (bid, cid, emptyCard = false) => {
-    console.log(bid, cid, "drag end");
+
+  const dragEnded = async (bid, cid) => {
     let s_boardIndex, s_cardIndex, t_boardIndex, t_cardIndex;
     s_boardIndex = boardsData.findIndex((item) => item._id === bid);
     if (s_boardIndex < 0) return;
@@ -237,7 +230,7 @@ function App() {
     t_boardIndex = boardsData.findIndex((item) => item._id === targetCard.bid);
     if (t_boardIndex < 0) return;
 
-    if (!emptyCard) {
+    if (targetCard.cid && targetCard.cid !== null) {
       t_cardIndex = boardsData[t_boardIndex]?.cards?.findIndex(
         (item) => item._id === targetCard.cid
       );
@@ -245,34 +238,36 @@ function App() {
     } else {
       t_cardIndex = 0;
     }
-
-    console.log(
-      bid,
-      "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><>",
-      targetCard.bid,
-      "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><>",
-      cid,
-      "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><>",
-      t_cardIndex
-    )
     const tempBoards = [...boardsData];
     const sourceCard = tempBoards[s_boardIndex].cards[s_cardIndex];
     tempBoards[s_boardIndex].cards.splice(s_cardIndex, 1);
     tempBoards[t_boardIndex].cards.splice(t_cardIndex, 0, sourceCard);
     setBoardsData(tempBoards);
 
+    if (bid === targetCard.bid) {
+      await axiosPutInterface("/move/within/card/board", {
+        optionData: {
+          boardId: bid,
+          cardId: cid,
+          newPosIndex: t_cardIndex
+        }
+      })
+
+    }
+
     setTargetCard({
       bid: "",
       cid: "",
     });
-    setDraggedCard({
-      bid: '',
-      cid: ''
-    })
   };
 
   const dragEntered = (bid, cid) => {
-    console.log(bid, cid);
+    if (!cid) {
+      setTargetCard({
+        bid
+      });
+      return
+    }
     if (targetCard.cid === cid) return;
     setTargetCard({
       bid,
@@ -349,8 +344,6 @@ function App() {
               addTaskToCard={addTaskToCard}
               editTask={editTaskFromCard}
               updateCardData={updateCardData}
-              onDragStart={setDraggedCard}
-              handleDrop={handleDrop}
 
             />
           ))}

@@ -10,16 +10,15 @@ import "./Board.css";
 function Board(props) {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const handleDrop = (e) => {
-    // console.log(e);
-    if (props.board?.cards?.length)
+  const handleDragEnter = (e) => {
+    if (props.board.cards.length)
       return
-     props.handleDrop(props.board._id)
+    props.dragEntered(props.board._id)
+
   }
 
   return (
     <div className="board" >
-      {/* onDragEnter={() => props.dragEntered(props.boardId, )} */}
       <div className="board_header">
         <p className="board_header_title">
           {props.board?.title}
@@ -40,7 +39,8 @@ function Board(props) {
           )}
         </div>
       </div>
-      <div className="board_cards custom-scroll" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+      <div className="board_cards custom-scroll" onDragEnter={handleDragEnter}>
+
         {props.board?.cards?.map((item, index) => (
           <Card
             key={index}
@@ -56,7 +56,6 @@ function Board(props) {
             addLabelToCard={props.addLabelToCard}
             addTaskToCard={props.addTaskToCard}
             editTask={props.editTask}
-            onDragStart={props.onDragStart}
           />
         ))}
         <Editable
