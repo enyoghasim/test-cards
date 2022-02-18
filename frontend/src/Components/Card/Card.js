@@ -81,10 +81,11 @@ function Card(props) {
         onDragEnd={() => props.dragEnded(props.boardId, _id)}
         onDragEnter={() => props.dragEntered(props.boardId, _id)}
         onClick={() => navigate(`/${props.boardId}/${_id}`)}
+        onDragStart={() => props.onDragStart({ bid: props.boardId, cid: _id })}
       >
         <div className="card_top">
           <div className="card_top_labels">
-            {labels?.map((item,index) => (
+            {labels?.map((item, index) => (
               <label key={index} style={{ backgroundColor: item.color }}>
                 {item.text}
               </label>

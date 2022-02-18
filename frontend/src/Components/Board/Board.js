@@ -14,7 +14,7 @@ function Board(props) {
     // console.log(e);
     if (props.board?.cards?.length)
       return
-      console.log("drag ended on the last one of the thing");
+     props.handleDrop(props.board._id)
   }
 
   return (
@@ -56,6 +56,7 @@ function Board(props) {
             addLabelToCard={props.addLabelToCard}
             addTaskToCard={props.addTaskToCard}
             editTask={props.editTask}
+            onDragStart={props.onDragStart}
           />
         ))}
         <Editable

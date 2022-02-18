@@ -18,6 +18,11 @@ function App() {
     cid: "",
   });
 
+  const [draggedCard, setDraggedCard] = useState({
+    bid: "",
+    cid: "",
+  });
+
   const addboardHandler = async (name) => {
     const tempBoards = [...boardsData];
     setBoardActionInProgress(true);
@@ -214,6 +219,10 @@ function App() {
     setBoardActionInProgress(false);
   };
 
+  const handleDrop = (bid) => {
+    console.log('this is the main board id', bid);
+  }
+
   const dragEnded = (bid, cid, emptyCard = false) => {
     console.log(bid, cid, "drag end");
     let s_boardIndex, s_cardIndex, t_boardIndex, t_cardIndex;
@@ -233,10 +242,10 @@ function App() {
         (item) => item._id === targetCard.cid
       );
       if (t_cardIndex < 0) return;
-    }else {
+    } else {
       t_cardIndex = 0;
     }
-  
+
     console.log(
       bid,
       "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><>",
@@ -256,6 +265,10 @@ function App() {
       bid: "",
       cid: "",
     });
+    setDraggedCard({
+      bid: '',
+      cid: ''
+    })
   };
 
   const dragEntered = (bid, cid) => {
@@ -336,6 +349,8 @@ function App() {
               addTaskToCard={addTaskToCard}
               editTask={editTaskFromCard}
               updateCardData={updateCardData}
+              onDragStart={setDraggedCard}
+              handleDrop={handleDrop}
 
             />
           ))}
