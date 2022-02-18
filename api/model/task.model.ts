@@ -1,35 +1,37 @@
-import { Schema, model, Model, Document } from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
 import { v4 } from 'uuid'
 import { logger } from '../service/logger'
 
-export interface IBoard extends Document {
+interface ITask extends Document {
   id: string;
+  cardRefId: string;
   title: string;
-  description: string;
-  cards: any[];
+  completed: boolean;
   updatedAt: any;
   createdAt: any;
 }
 
-const BoardSchema = new Schema<IBoard>(
+const TaskSchema = new Schema<ITask>(
   {
     id: {
       type: String,
       default: v4()
     },
+    cardRefId: {
+      type: String,
+      required: true,
+      default: v4()
+    },
     title: {
       type: String,
-      index: { unique: true, sparse: true },
       required: true,
       lowercase: true,
       trim: true
     },
-    description: {
-      type: String,
-      required: true,
-      default: 'no description for this board'
+    completed: {
+      type: Boolean,
+      default: false
     },
-    cards: [{ type: Schema.Types.ObjectId, ref: 'Cards' }],
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
   },
@@ -44,17 +46,17 @@ const BoardSchema = new Schema<IBoard>(
   }
 )
 
-BoardSchema.pre('save', function (next) {
+TaskSchema.pre('save', function (next) {
   // do stuff
   const now = new Date()
   this.updatedAt = now
   if (!this.createdAt) {
     this.createdAt = now
   }
-  logger.info('before saving board here')
+  logger.info('before saving label here')
   next()
 })
 
-const Boards = model<IBoard>('Boards', BoardSchema)
+const TaskModel = model<ITask>('TaskModel', TaskSchema)
 
-export default Boards
+export default TaskModel

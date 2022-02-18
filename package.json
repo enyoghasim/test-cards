@@ -3,33 +3,77 @@
   "version": "1.0.0",
   "main": "api/app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "eslint": "eslint --cache --fix --ext .js,.jsx,ts,tsx",
+    "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore . --fix",
     "serve": "concurrently \"nodemon\" \"cd frontend && yarn start\"",
     "build": "rimraf ./dist && tsc",
+    "pretter": "prettier --config .prettierrc.json --write api/**/*.ts",
+    "prettier:check": "prettier --check .",
     "start": "npm run build && node dist/app.js",
     "postinstall": "cd frontend && yarn install"
   },
   "repository": "https://github.com/enyoghasim/test-cards.git",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^27.4.0",
     "@types/node": "^17.0.17",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "husky": "4.2.3",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.3.3",
     "nodemon": "^2.0.15",
+    "pretty-quick": "^3.1.3",
     "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.3",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.12",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/mongoose": "^5.11.97",
+    "@types/swagger-jsdoc": "^6.0.1",
+    "@types/swagger-ui": "^3.52.0",
     "@types/uuid": "^8.3.4",
+    "body-parser": "^1.19.1",
     "concurrently": "^7.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "mongoose": "^6.2.1",
-    "uuid": "^8.3.2"
+    "prettier": "^2.5.1",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.3.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.5.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "lint-staged": {
+    "api/**/*.{ts}": [
+      "yarn pretter",
+      "yarn lint:fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "applypatch-msg": "echo \"[Husky] applypatch-msg\"",
+      "pre-applypatch": "echo \"Husky] pre-applypatch\"",
+      "post-applypatch": "echo \"[Husky] post-applypatch\"",
+      "pre-commit": "lint-staged"
+    }
   }
 }

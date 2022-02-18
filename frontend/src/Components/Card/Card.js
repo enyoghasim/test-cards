@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from 'react-router-dom'
+
 import { CheckSquare, Clock, MoreHorizontal } from "react-feather";
 
 import Dropdown from "../Dropdown/Dropdown";
@@ -10,7 +12,7 @@ function Card(props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const { id, title, date, tasks, labels } = props.card;
+  const { _id, title, date, tasks, labels } = props.card;
 
   const formatDate = (value) => {
     if (!value) return "";
@@ -37,27 +39,53 @@ function Card(props) {
     return day + " " + month;
   };
 
+  const params = useParams()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!params.boardId || !props.boardId) {
+      setShowModal(false)
+    } else if (!((params.boardId) ===
+      (props.boardId)) ||
+      !((params.cardId) ===
+        (_id))) {
+      setShowModal(false)
+    } else if (((params.boardId) ===
+      (props.boardId)) ||
+      ((params.cardId) ===
+        (_id))) {
+      setShowModal(true)
+    }
+  }, [params])
+
   return (
     <>
       {showModal && (
         <CardInfo
-          onClose={() => setShowModal(false)}
+          onClose={() => navigate('/')}
           card={props.card}
           boardId={props.boardId}
           updateCard={props.updateCard}
+          deleteLabel={props.deleteLabel}
+          deleteTask={props.deleteTask}
+          addLabelToCard={props.addLabelToCard}
+          addTaskToCard={props.addTaskToCard}
+          editTask={props.editTask}
+          updateCardData={props.updateCardData}
         />
       )}
       <div
+
         className="card"
         draggable
-        onDragEnd={() => props.dragEnded(props.boardId, id)}
-        onDragEnter={() => props.dragEntered(props.boardId, id)}
-        onClick={() => setShowModal(true)}
+        onDragEnd={() => props.dragEnded(props.boardId, _id)}
+        onDragEnter={() => props.dragEntered(props.boardId, _id)}
+        onClick={() => navigate(`/${props.boardId}/${_id}`)}
       >
         <div className="card_top">
           <div className="card_top_labels">
-            {labels?.map((item, index) => (
-              <label key={index} style={{ backgroundColor: item.color }}>
+            {labels?.map((item) => (
+              <label key={item._id} style={{ backgroundColor: item.color }}>
                 {item.text}
               </label>
             ))}
@@ -75,7 +103,7 @@ function Card(props) {
                 class="board_dropdown"
                 onClose={() => setShowDropdown(false)}
               >
-                <p onClick={() => props.removeCard(props.boardId, id)}>
+                <p onClick={() => props.removeCard(props.boardId, _id)}>
                   Delete Card
                 </p>
               </Dropdown>

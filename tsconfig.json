@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "esModuleInterop": true,
     "target": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
+    "lib": ["es2016", "esnext"],
+    "outDir": "./dist",
+    "rootDir": "./api",
+    "strict": true,
+    "skipLibCheck": true,
     "sourceMap": true,
-    "outDir": "dist"
+    "noImplicitAny": false
   },
-  "lib": ["es2015"]
+  "include": ["api/**/*", "api/configuration/swagger.ts"],
+  "exclude": ["tests/**/*"]
 }
-
